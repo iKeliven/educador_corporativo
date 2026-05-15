@@ -8,7 +8,7 @@ import Title from "../components/UI/Title";
 import Subtitle from "../components/UI/Subtitle";
 import Button from "../components/UI/Button";
 
-import AboutImg from "../assets/About.jpg";
+import aboutImg from "../assets/about.jpg";
 
 import {
   LuBookOpen,
@@ -140,7 +140,7 @@ export default function About() {
 
       <section className={styles.textSection}>
         <img
-          src={AboutImg}
+          src={aboutImg}
           alt="Evento Corporativo"
           className={styles.imgSection}
         />
