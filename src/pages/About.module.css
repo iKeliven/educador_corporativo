@@ -1,0 +1,400 @@
+.container {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 0 100px;
+    display: block;
+}
+
+.hero {
+    padding: 4rem 0 5rem;
+}
+
+.hero .container {
+    display: grid;
+    grid-template-columns: 1fr 40rem;
+    gap: 4rem;
+    align-items: center;
+}
+
+.heroContent {
+    max-width: 68rem;
+}
+
+.heroActions {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+
+.heroVisual {
+    position: relative;
+}
+
+.mockup {
+    position: relative;
+    overflow: hidden;
+    min-height: 40rem;
+    border-radius: var(--radius);
+    background: rgba(19, 34, 56, 0.72);
+    border: 1px solid var(--navy);
+    box-shadow: var(--shadow-god);
+}
+
+.mockupHeader {
+    height: 5rem;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--gold-transparent);
+}
+
+.mockupHeader span {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.7;
+}
+
+.mockupBody {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    height: 40rem;
+    padding: 3rem;
+}
+
+.timelineLine {
+    position: absolute;
+    top: 2rem;
+    bottom: 2rem;
+    left: 50%;
+    width: 0.3rem;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--gold), transparent);
+}
+
+.mockupCard {
+    position: absolute;
+    width: 18rem;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    background: var(--navy-transparent);
+    border: 1px solid var(--gold-soft);
+}
+
+.mockupCard strong {
+    color: var(--gold);
+    font-size: clamp(1.5rem, 1.4vw, 1.7rem);
+    margin-bottom: 0.7rem;
+}
+
+
+
+.left {
+    left: 3rem;
+}
+
+.right {
+    right: 3rem;
+}
+
+.mockupCard:nth-of-type(2) {
+    top: 4rem;
+}
+
+.mockupCard:nth-of-type(3) {
+    top: 14.7rem;
+}
+
+.mockupCard:nth-of-type(4) {
+    bottom: 5rem;
+}
+
+.floatingIcon {
+    position: absolute;
+    right: -2rem;
+    top: -2rem;
+    width: 5rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--night);
+
+    font-size: 3.4rem;
+
+    box-shadow: var(--shadow-gold);
+}
+
+.textSection {
+    padding: 0px 150px;
+    display: flex;
+}
+
+
+
+.textContainer {
+    max-width: 90rem;
+    margin: 0 auto;
+    padding: 4rem;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    background: var(--gray-transparent);
+    border: 1px solid var(--border);
+}
+
+
+.imgSection {
+    width: 35%;
+    border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.proposal,
+.features,
+.audience {
+    padding: 7rem 0;
+}
+
+.sectionHeader {
+    max-width: 76rem;
+    margin-bottom: 4rem;
+}
+
+.proposalGrid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.4rem;
+}
+
+.proposalGrid div {
+    min-height: 11rem;
+    padding: 1rem;
+    border-radius: var(--radius);
+    background: var(--gold-transparent);
+    border: 1px solid var(--gold-soft);
+    color: var(--gold);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.featureGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.featureCard {
+    padding: 3rem;
+
+    border-radius: 2.4rem;
+    background: var(--navy-transparent);
+    border: 1px solid transparent;
+    transition: var(--transition);
+}
+
+.featureCard:hover {
+    transform: translateY(-0.5rem);
+    border-color: var(--gold-transparent);
+}
+
+.icon {
+    width: 5rem;
+    height: 5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1.6rem;
+    background: var(--gold-transparent);
+    color: var(--gold);
+    font-size: 2rem;
+}
+
+
+.audienceGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.6rem;
+}
+
+.audienceItem {
+    padding: 2rem;
+    display: flex;
+    align-items: end;
+    gap: 1.6rem;
+    border-radius: var(--radius);
+    background: var(--navy-transparent);
+}
+
+.audienceItem span {
+    color: var(--gold);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+
+.objective {
+    padding: 4rem;
+}
+
+.objectiveCard {
+    max-width: 110rem;
+    margin: 0 auto;
+
+    padding: 4rem;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2.4rem;
+
+    border-radius: 3rem;
+    background: linear-gradient(135deg,
+            rgba(212, 175, 55, 0.18),
+            rgba(19, 34, 56, 0.72));
+    border: 1px solid rgba(212, 175, 55, 0.22);
+}
+
+.objectiveIcon {
+    width: 7rem;
+    height: 7rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 2rem;
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--gold);
+
+    font-size: 3.2rem;
+}
+
+
+@media (max-width: 1000px) {
+    .container {
+        max-width: 120rem;
+        padding: 0 80px;
+    }
+
+    .hero .container {
+        grid-template-columns: 1fr;
+    }
+
+    .proposalGrid,
+    .featureGrid,
+    .audienceGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .heroVisual {
+        max-width: 52rem;
+    }
+
+    .textSection {
+        padding: 0px 70px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .imgSection {
+        width: 100%;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .textContainer {
+        border-radius: 0 0 var(--radius) var(--radius);
+
+    }
+}
+
+
+
+@media (max-width: 640px) {
+    .container {
+        max-width: 100vw;
+        padding: 0 40px;
+    }
+
+    .hero .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .heroContent {
+        width: 80vw;
+        margin-bottom: 2.5rem;
+    }
+
+    .heroVisual {
+        width: 90vw;
+    }
+
+    .heroActions {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.2rem;
+        flex-wrap: wrap;
+        margin-top: 3rem;
+    }
+
+    .heroVisual {
+        position: relative;
+    }
+
+    .proposal,
+    .features,
+    .audience {
+        padding: 4rem 0;
+        width: 80vw;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .sectionHeader {
+        width: 80vw;
+        margin-bottom: 3rem;
+    }
+
+
+    .proposalGrid,
+    .featureGrid,
+    .audienceGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .textContainer,
+    .objectiveCard {
+        padding: 1.6rem;
+    }
+
+    .objectiveCard {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .objectiveCard h2 {
+        font-size: 1.6rem;
+    }
+
+    .objectiveCard p {
+        font-size: 1rem;
+    }
+
+    .objectiveIcon {
+        width: 5rem;
+        height: 5rem;
+        border-radius: var(--radius);
+        font-size: 3rem;
+    }
+
+    .textSection {
+        padding: 0px 20px;
+    }
+}

@@ -1,0 +1,25 @@
+:root {
+    --navy: #002a57;
+    --navy-light: #003b75;
+    --navy-transparent: rgba(2, 10, 38, 0.85);
+    --gold: #cbba8a;
+    --gold-soft: #e8d4a3;
+    --gold-transparent: rgba(212, 175, 55, .12);
+
+    --white: #f8fafc;
+    --gray: #cbd5e1;
+    --gray-transparent: rgba(255, 255, 255, 0.4);
+    --night: #081120;
+    --radius: 24px;
+    --radius-full: 999px;
+
+    --shadow-gold:
+        0 0 20px rgba(212, 175, 55, 0.15);
+
+    --transition: all .3s ease;
+
+    /* STATUS */
+    --color-success: #22c55e;
+    --color-danger: #ef4444;
+    --color-warning: #f59e0b;
+}

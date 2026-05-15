@@ -1,0 +1,57 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--text);
+}
+
+/* INPUT + TEXTAREA */
+.input,
+.textarea {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--gray-transparent);
+  background: var(--navy-transparent);
+  color: var(--white);
+
+  outline: none;
+
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+/* INPUT */
+.input {
+  height: 3rem;
+  padding: 0 1rem;
+}
+
+/* TEXTAREA */
+.textarea {
+  min-height: 12rem;
+
+  padding: 1.4rem;
+
+  resize: vertical;
+
+  line-height: 1.7;
+}
+
+/* FOCUS */
+.input:focus,
+.textarea:focus {
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.input::placeholder,
+.textarea::placeholder{
+    color: var(--gray-transparent);
+    font-weight: 200;
+}

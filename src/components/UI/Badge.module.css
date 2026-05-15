@@ -1,0 +1,36 @@
+.badge {
+    display: inline-flex;
+    letter-spacing: 4px;
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+.primary {
+    color: var(--gold);
+}
+
+.secondary {
+    color: var(--gold);
+    padding: 10px 16px;
+    border-radius: var(--radius-full);
+    background: var(--gold-transparent);
+}
+
+
+.ghost {
+    color: white;
+    padding: 10px 16px;
+    border: 1px solid white;
+    border-radius: var(--radius-full);
+}
+
+@media (max-width: 600px) {
+
+.badge {
+    font-size: 0.8rem;
+}
+
+    .ghost .secondary {
+        padding: 8px 12px;
+    }
+}

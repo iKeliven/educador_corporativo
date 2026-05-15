@@ -1,0 +1,77 @@
+.subtitle {
+  font-weight: 300;
+  line-height: 1.5;
+}
+/* VARIANTS */
+.light {
+  color: var(--white);
+}
+
+.dark {
+  color: var(--navy);
+}
+
+.gold {
+  color: var(--gold);
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.warning{
+  color: var(--color-warning);
+}
+
+.bold{
+  font-weight: bold;
+}
+
+/* SIZES */
+.sm {
+  font-size: clamp(0.8rem, 0.8vw, 0.9rem);
+}
+
+.md {
+  font-size: clamp(1rem, 1vw, 1.1rem);
+}
+
+.bg {
+  font-size: clamp(1.3rem, 1.8vw, 1.6rem);
+
+  line-height: 1.4;
+}
+
+.lg {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+
+  line-height: 1.2;
+}
+
+.gg {
+  font-size: clamp(2.3rem, 5vw, 5rem);
+
+  line-height: 1.05;
+}
+
+
+/* ALIGN */
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.bold{
+  font-weight: bold;
+}

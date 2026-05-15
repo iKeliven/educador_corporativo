@@ -1,0 +1,71 @@
+.title span {
+  color: var(--gold);
+}
+
+
+/* VARIANTS */
+.light {
+  color: var(--white);
+}
+
+.dark {
+  color: var(--navy);
+}
+
+.gold {
+  color: var(--gold);
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.error {
+  color: var(--color-error);
+}
+
+.warning{
+  color: var(--color-warning);
+}
+
+
+/* ALIGN */
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+/* SIZES */
+
+.sm {
+  font-size: clamp(1.2rem, 1vw, 1.4rem);
+}
+
+.md {
+  font-size: clamp(1.6rem, 1.4vw, 1.8rem);
+}
+
+.bg {
+  font-size: clamp(2.2rem, 3vw, 2.8rem);
+
+  line-height: 1.2;
+}
+
+.lg {
+  font-size: clamp(2.8rem, 5vw, 6rem);
+
+  line-height: 1.05;
+}
+
+

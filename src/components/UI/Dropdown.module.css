@@ -1,0 +1,15 @@
+.dropdown {
+  width: 100%;
+
+  padding: 14px 18px;
+
+  border-radius: 18px;
+
+  border: 1px solid var(--border);
+
+  background: var(--navy-light);
+
+  color: white;
+
+  outline: none;
+}

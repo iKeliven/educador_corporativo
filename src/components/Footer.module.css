@@ -1,0 +1,23 @@
+
+.footer{
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 80px;
+    border-top:
+        1px solid rgba(255, 255, 255, .06);
+}
+
+.footer img{
+    width: 120px;
+}
+
+@media (max-width: 768px) {
+    .footer{
+        padding: 20px 40px;
+    }
+    .footer img{
+    width: 80px;
+}
+}

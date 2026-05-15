@@ -1,0 +1,49 @@
+.card {
+    padding: 30px;
+    border-radius: 2.8rem;
+    background: rgba(19, 34, 56, 0.85);
+    border: 1px solid var(--border);
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.2);
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-0.4rem);
+    border-color: rgba(212, 175, 55, 0.35);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.company {
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.count {
+    color: var(--gray);
+    font-size: 1.3rem;
+}
+
+
+.slug {
+    color: var(--gray);
+    width: 100%;
+    margin-top: 20px;
+    font-size: 1rem;
+    margin-bottom: 1.4rem;
+}
+
+.actions {
+    padding-top: 1.5rem;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.7);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}

@@ -1,0 +1,44 @@
+.layout {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--navy);
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glowTop {
+  position: absolute;
+  top: -10rem;
+  left: -10rem;
+  width: 40rem;
+  height: 40rem;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.1);
+  filter: blur(8rem);
+}
+
+.glowBottom {
+  position: absolute;
+  bottom: -12rem;
+  right: -12rem;
+  width: 50rem;
+  height: 50rem;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.1);
+  filter: blur(8rem);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}

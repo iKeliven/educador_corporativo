@@ -1,0 +1,148 @@
+.page {
+  padding: 6rem 2rem;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 4rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 2rem;
+}
+
+.actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 1.6rem;
+
+  margin-top: 2rem;
+}
+
+.trailsSection {
+  margin-top: 4rem;
+}
+
+.sectionHeader {
+  padding: 2rem;
+  border-radius: 2rem;
+  background: rgba(19, 34, 56, 0.55);
+  border: 1px solid var(--border);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.sectionHeader h2 {
+  font-size: 2rem;
+}
+
+.sectionHeader p {
+  margin-top: 0.4rem;
+  color: var(--text);
+  font-size: 1.4rem;
+}
+
+.trailsList {
+  margin-top: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.trailItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.6rem;
+  align-items: center;
+
+  padding: 1.6rem;
+  border-radius: 1.8rem;
+
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid var(--border);
+}
+
+.trailOrder {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.trailContent h3 {
+  font-size: 1.7rem;
+}
+
+.trailContent p {
+  margin-top: 0.4rem;
+  color: var(--text);
+  font-size: 1.4rem;
+}
+
+.trailMeta {
+  margin-top: 0.8rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.trailMeta span {
+  font-size: 1.2rem;
+  color: var(--gold);
+}
+
+.trailActions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .trailItem {
+    grid-template-columns: 1fr;
+  }
+
+  .trailActions {
+    flex-direction: column;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+}

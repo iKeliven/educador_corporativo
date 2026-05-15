@@ -1,0 +1,121 @@
+/* JourneyHowWorks.module.css */
+
+.section {
+  position: relative;
+  padding: 12rem 2rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  max-width: 70rem;
+  margin-bottom: 6rem;
+}
+
+.header span {
+  color: var(--gold);
+}
+
+.grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 2.4rem;
+}
+
+.card {
+  position: relative;
+
+  padding: 4rem;
+
+  border-radius: 3.2rem;
+
+  background:
+    rgba(19,34,56,.65);
+
+  border:
+    1px solid var(--border);
+
+  backdrop-filter: blur(14px);
+
+  overflow: hidden;
+
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-.6rem);
+
+  border-color:
+    rgba(212,175,55,.25);
+}
+
+.icon {
+  width: 5rem;
+  height: 5rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--radius);
+
+  margin-bottom: 2rem;
+  background:var(--gold-transparent);
+
+  border:
+    1px solid rgba(212,175,55,.15);
+
+  color: var(--gold);
+
+  font-size: 3rem;
+}
+
+.title {
+  font-size: 2.6rem;
+  color: white;
+
+  margin-bottom: 2rem;
+}
+
+.description {
+  color: var(--text);
+
+  line-height: 1.8;
+
+  font-size: 1.6rem;
+}
+
+.number {
+  position: absolute;
+
+  right: 3rem;
+  bottom: 2rem;
+
+  font-size: 8rem;
+
+  font-weight: 700;
+
+  color:
+    rgba(255,255,255,.04);
+
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 8rem 2rem;
+  }
+
+  .card {
+    padding: 3rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+}
