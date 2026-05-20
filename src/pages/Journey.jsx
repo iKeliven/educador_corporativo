@@ -33,30 +33,28 @@ export default function Journey() {
       try {
         setLoading(true);
 
-        const { data: journeyData, error: journeyError } = await supabase
+        const { data, error } = await supabase
           .from("journeys")
-          .select("*")
+          .select(`
+    *,
+    trails (*)
+  `)
           .eq("slug", slug)
-          .maybeSingle();
+          .single();
 
-        if (journeyError || !journeyData) {
+        if (error || !data) {
           setErrorMessage("Jornada não encontrada.");
           return;
         }
 
-        const { data: trailsData, error: trailsError } = await supabase
-          .from("trails")
-          .select("*")
-          .eq("journey_id", journeyData.id)
-          .order("order_number", { ascending: true });
+        const orderedTrails =
+          (data.trails || []).sort(
+            (a, b) =>
+              a.order_number - b.order_number
+          );
 
-        if (trailsError) {
-          setErrorMessage(trailsError.message);
-          return;
-        }
-
-        setJourney(journeyData);
-        setTrails(trailsData || []);
+        setJourney(data);
+        setTrails(orderedTrails);
       } finally {
         setLoading(false);
       }
@@ -106,9 +104,8 @@ export default function Journey() {
   return (
     <MainLayout>
       <HeroJourney
-        badge={journey.type || "JORNADA"}
+        badge={journey.company || "JORNADA"}
         title={journey.title}
-        highlight={journey.company}
         subtitle={journey.description}
         cta="Iniciar jornada"
         ctaLink="#start"
@@ -126,7 +123,7 @@ export default function Journey() {
           {
             icon: <LuGraduationCap />,
             strong: "Certificado",
-            text: "PADRÃO",
+            text: journey.type || "PADRÃO",
           },
         ]}
       />
