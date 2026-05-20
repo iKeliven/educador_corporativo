@@ -139,6 +139,7 @@ export default function About() {
               <Button
                 size="lg"
                 variant="secondary"
+                target="blank"
                 onClick={handlePreview}
               >
                 Ver exemplo
