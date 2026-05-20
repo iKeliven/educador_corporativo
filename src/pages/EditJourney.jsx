@@ -135,7 +135,10 @@ export default function EditJourney() {
     }
 
     function openCreateTrail() {
-        setSelectedTrail(null);
+        setSelectedTrail({
+            order_number: trails.length + 1,
+        });
+
         setIsModalOpen(true);
     }
 
@@ -160,8 +163,8 @@ export default function EditJourney() {
             return;
         }
 
-        setTrails((current) =>
-            current.filter((trail) => trail.id !== trailId)
+        const updatedTrails = trails.filter(
+            (trail) => trail.id !== trailId
         );
 
         setJourney((current) => ({
@@ -169,30 +172,50 @@ export default function EditJourney() {
             count: Math.max((current.count || 1) - 1, 0),
         }));
 
+        await normalizeTrailOrder(updatedTrails);
+
         setConfirmDeleteTrail(null);
     }
 
-    function handleTrailSaved(savedTrail) {
-        if (selectedTrail) {
-            setTrails((current) =>
-                current
-                    .map((trail) =>
-                        trail.id === savedTrail.id ? savedTrail : trail
-                    )
-                    .sort((a, b) => a.order_number - b.order_number)
+    async function normalizeTrailOrder(updatedTrails) {
+        const orderedTrails = [...updatedTrails]
+            .sort((a, b) => a.order_number - b.order_number)
+            .map((trail, index) => ({
+                ...trail,
+                order_number: index + 1,
+            }));
+
+        setTrails(orderedTrails);
+
+        await Promise.all(
+            orderedTrails.map((trail) =>
+                supabase
+                    .from("trails")
+                    .update({
+                        order_number: trail.order_number,
+                    })
+                    .eq("id", trail.id)
+            )
+        );
+    }
+
+    async function handleTrailSaved(savedTrail) {
+        let updatedTrails;
+
+        if (selectedTrail?.id) {
+            updatedTrails = trails.map((trail) =>
+                trail.id === savedTrail.id ? savedTrail : trail
             );
         } else {
-            setTrails((current) =>
-                [...current, savedTrail].sort(
-                    (a, b) => a.order_number - b.order_number
-                )
-            );
+            updatedTrails = [...trails, savedTrail];
 
             setJourney((current) => ({
                 ...current,
                 count: (current.count || 0) + 1,
             }));
         }
+
+        await normalizeTrailOrder(updatedTrails);
 
         closeModal();
     }
@@ -296,25 +319,25 @@ export default function EditJourney() {
                                         {window.location.origin}/jornada/{journey.slug}
 
                                         <button
-                                        type="button"
-                                        onClick={copyJourneyLink}
-                                        className={styles.copyButton}
-                                        title={
-                                            copied
-                                                ? "Link copiado!"
-                                                : "Copiar link da jornada"
-                                        }
-                                    >
+                                            type="button"
+                                            onClick={copyJourneyLink}
+                                            className={styles.copyButton}
+                                            title={
+                                                copied
+                                                    ? "Link copiado!"
+                                                    : "Copiar link da jornada"
+                                            }
+                                        >
 
-                                        {
-                                            copied
-                                                ? <LuCheck />
-                                                : <LuCopy />
-                                        }
+                                            {
+                                                copied
+                                                    ? <LuCheck />
+                                                    : <LuCopy />
+                                            }
 
-                                    </button>
+                                        </button>
                                     </div>
-                                    
+
                                     {copied && (
                                         <Subtitle size="sm" variant="success">
                                             Link copiado com sucesso!
@@ -466,7 +489,7 @@ export default function EditJourney() {
                                             }}
                                         >
                                             <div className={styles.trailNumber}>
-                                                {trail.order_number}
+                                                {index + 1}
                                             </div>
 
                                             <div className={styles.trailBody}>
@@ -497,7 +520,12 @@ export default function EditJourney() {
                                                         type="button"
                                                         size="sm"
                                                         variant="secondary"
-                                                        onClick={() => openEditTrail(trail)}
+                                                        onClick={() =>
+                                                            openEditTrail({
+                                                                ...trail,
+                                                                order_number: index + 1,
+                                                            })
+                                                        }
                                                     >
                                                         Editar
                                                     </Button>

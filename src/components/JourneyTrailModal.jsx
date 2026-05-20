@@ -16,7 +16,6 @@ export default function JourneyTrailModal({
   journeyId,
   onSave,
 }) {
-
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -27,32 +26,23 @@ export default function JourneyTrailModal({
     link: "",
   });
 
-  const [loading, setLoading] =
-    useState(false);
-
-  const [errorMessage, setErrorMessage] =
-    useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-
     setErrorMessage("");
 
     if (trail) {
-
       setForm({
         title: trail.title || "",
         description: trail.description || "",
-        duration_minutes:
-          trail.duration_minutes || "",
-        order_number:
-          trail.order_number || "",
+        duration_minutes: trail.duration_minutes || "",
+        order_number: trail.order_number || "",
         date: trail.date || "",
         hour: trail.hour || "",
         link: trail.link || "",
       });
-
     } else {
-
       setForm({
         title: "",
         description: "",
@@ -62,17 +52,13 @@ export default function JourneyTrailModal({
         hour: "",
         link: "",
       });
-
     }
-
   }, [trail, isOpen]);
 
   if (!isOpen) return null;
 
   function handleChange(event) {
-
-    const { name, value } =
-      event.target;
+    const { name, value } = event.target;
 
     setForm((current) => ({
       ...current,
@@ -81,7 +67,6 @@ export default function JourneyTrailModal({
   }
 
   function validateForm() {
-
     if (!form.title.trim()) {
       return "Informe o título da trilha.";
     }
@@ -94,9 +79,7 @@ export default function JourneyTrailModal({
       return "Informe a duração da trilha.";
     }
 
-    if (
-      Number(form.duration_minutes) <= 0
-    ) {
+    if (Number(form.duration_minutes) <= 0) {
       return "A duração deve ser maior que zero.";
     }
 
@@ -104,9 +87,7 @@ export default function JourneyTrailModal({
       return "Informe a ordem da trilha.";
     }
 
-    if (
-      Number(form.order_number) <= 0
-    ) {
+    if (Number(form.order_number) <= 0) {
       return "A ordem deve ser maior que zero.";
     }
 
@@ -118,10 +99,7 @@ export default function JourneyTrailModal({
       return "Informe o horário.";
     }
 
-    if (
-      mode === "create" &&
-      !journeyId
-    ) {
+    if (mode === "create" && !journeyId) {
       return "Jornada não encontrada.";
     }
 
@@ -129,93 +107,56 @@ export default function JourneyTrailModal({
   }
 
   async function handleSubmit(event) {
-
     event.preventDefault();
 
-    const validationError =
-      validateForm();
+    const validationError = validateForm();
 
     if (validationError) {
-
-      setErrorMessage(
-        validationError
-      );
-
+      setErrorMessage(validationError);
       return;
     }
 
     setLoading(true);
-
     setErrorMessage("");
 
+    const orderNumber = Number(form.order_number);
+
     const payload = {
-
-      title: form.title,
-
-      description:
-        form.description,
-
-      duration_minutes:
-        Number(form.duration_minutes),
-
-      order_number:
-        Number(form.order_number),
-
+      title: form.title.trim(),
+      description: form.description.trim(),
+      duration_minutes: Number(form.duration_minutes),
+      order_number: orderNumber,
       date: form.date,
-
       hour: form.hour,
-
-      link: form.link,
-
+      link: form.link.trim(),
     };
 
     let response;
 
-    if (
-      mode === "edit" &&
-      trail?.id
-    ) {
-
-      response =
-        await supabase
-
-          .from("trails")
-
-          .update(payload)
-
-          .eq("id", trail.id)
-
-          .select()
-
-          .single();
-
+    if (mode === "edit" && trail?.id) {
+      response = await supabase
+        .from("trails")
+        .update(payload)
+        .eq("id", trail.id)
+        .select()
+        .single();
     } else {
-
-      response =
-        await supabase
-
-          .from("trails")
-
-          .insert([
-            {
-              ...payload,
-              journey_id: journeyId,
-            },
-          ])
-
-          .select()
-
-          .single();
+      response = await supabase
+        .from("trails")
+        .insert([
+          {
+            ...payload,
+            journey_id: journeyId,
+          },
+        ])
+        .select()
+        .single();
     }
 
     setLoading(false);
 
     if (response.error) {
-
-      setErrorMessage(
-        response.error.message
-      );
-
+      setErrorMessage(response.error.message);
       return;
     }
 
@@ -224,46 +165,24 @@ export default function JourneyTrailModal({
 
   return (
     <div className={styles.overlay}>
-
       <div className={styles.modal}>
-
         <header className={styles.header}>
-
           <div>
-
             <span className={styles.badge}>
-              {
-                mode === "edit"
-                  ? "Editar trilha"
-                  : "Nova trilha"
-              }
+              {mode === "edit" ? "Editar trilha" : "Nova trilha"}
             </span>
 
             <h2>
-              {
-                mode === "edit"
-                  ? "Atualizar trilha"
-                  : "Cadastrar trilha"
-              }
+              {mode === "edit" ? "Atualizar trilha" : "Cadastrar trilha"}
             </h2>
-
           </div>
 
-          <button
-            type="button"
-            className={styles.close}
-            onClick={onClose}
-          >
+          <button type="button" className={styles.close} onClick={onClose}>
             ×
           </button>
-
         </header>
 
-        <form
-          className={styles.form}
-          onSubmit={handleSubmit}
-        >
-
+        <form className={styles.form} onSubmit={handleSubmit}>
           <Input
             label="Título"
             name="title"
@@ -282,7 +201,6 @@ export default function JourneyTrailModal({
           />
 
           <div className={styles.grid}>
-
             <Input
               label="Duração (em minutos)"
               name="duration_minutes"
@@ -300,11 +218,9 @@ export default function JourneyTrailModal({
               value={form.order_number}
               onChange={handleChange}
             />
-
           </div>
 
           <div className={styles.grid}>
-
             <Input
               label="Data"
               name="date"
@@ -320,7 +236,6 @@ export default function JourneyTrailModal({
               value={form.hour}
               onChange={handleChange}
             />
-
           </div>
 
           <Input
@@ -331,50 +246,27 @@ export default function JourneyTrailModal({
             onChange={handleChange}
           />
 
-          {
-            errorMessage && (
-              <Subtitle
-                size="sm"
-                variant="error"
-              >
-                {errorMessage}
-              </Subtitle>
-            )
-          }
+          {errorMessage && (
+            <Subtitle size="sm" variant="error">
+              {errorMessage}
+            </Subtitle>
+          )}
 
           <footer className={styles.actions}>
-
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={onClose}>
               Cancelar
             </Button>
 
-            <Button
-              type="submit"
-              size="sm"
-              disabled={loading}
-            >
-
-              {
-                loading
-                  ? "Salvando..."
-                  : mode === "edit"
-                  ? "Salvar alterações"
-                  : "Adicionar trilha"
-              }
-
+            <Button type="submit" size="sm" disabled={loading}>
+              {loading
+                ? "Salvando..."
+                : mode === "edit"
+                ? "Salvar alterações"
+                : "Adicionar trilha"}
             </Button>
-
           </footer>
-
         </form>
-
       </div>
-
     </div>
   );
 }

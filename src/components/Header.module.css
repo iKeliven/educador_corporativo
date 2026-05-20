@@ -9,21 +9,22 @@
         1px solid var(--light-transparent);
 }
 
-.logo img{
+.logo img {
     width: 180px;
 }
 
-.user{
+.user {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.userInfo{
+.userInfo {
     display: flex;
     flex-direction: column;
 }
-.avatar{
+
+.avatar {
     border: solid 3px var(--gold);
     width: 45px;
     height: 45px;
@@ -34,7 +35,7 @@
     background-color: var(--light-transparent);
 }
 
-.navLink{
+.navLink {
     color: var(--white);
     text-decoration: none;
     transition: var(--transition);
@@ -47,24 +48,29 @@
 }
 
 
-.navLink:hover{
+.navLink:hover {
     color: var(--gold);
 }
 
-.actions{
+.actions {
     display: flex;
     gap: 40px;
 }
 
 @media (max-width: 608px) {
-    .header{
-        padding: 20px 30px;
-    justify-content: space-between;
+    .header {
+        padding: 20px;
+        justify-content: space-between;
     }
-    .logo img{
-    width: 100px;
-}
-    .nav{
-        gap: 30px;
+
+    .logo img {
+        width: 150px;
+    }
+
+    .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transform: scale(0.7);
     }
 }

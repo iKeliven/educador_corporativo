@@ -61,19 +61,24 @@ export default function Dashboard() {
   }
 
   async function handleDelete(journey) {
-    const confirmDelete = confirm(
-      `Deseja excluir a jornada "${journey.title}"?`
-    );
+    const { error: trailsError } = await supabase
+      .from("trails")
+      .delete()
+      .eq("journey_id", journey.id);
 
-    if (!confirmDelete) return;
+    if (trailsError) {
+      console.log(trailsError.message);
+      alert("Erro ao excluir trilhas da jornada.");
+      return;
+    }
 
-    const { error } = await supabase
+    const { error: journeyError } = await supabase
       .from("journeys")
       .delete()
       .eq("id", journey.id);
 
-    if (error) {
-      console.log(error.message);
+    if (journeyError) {
+      console.log(journeyError.message);
       alert("Erro ao excluir jornada.");
       return;
     }
