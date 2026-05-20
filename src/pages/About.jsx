@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 
 import styles from "./About.module.css";
 
@@ -78,11 +77,6 @@ export default function About() {
     { icon: <LuTarget />, label: "Programas de capacitação" },
   ];
 
-  const navigate = useNavigate();
-
-  function handlePreview() {
-    navigate("/jornada/pedagogica");
-  }
 
   return (
     <MainLayout>
@@ -136,14 +130,18 @@ export default function About() {
                 Criar jornada
               </Button>*/}
 
-              <Button
-                size="lg"
-                variant="secondary"
-                target="blank"
-                onClick={handlePreview}
+              <a
+                href="https://educadorcoporativo.netlify.app/jornada/pedagogica"
+                target="_blank"
+                rel="noreferrer"
               >
-                Ver exemplo
-              </Button>
+                <Button
+                  size="lg"
+                  variant="secondary"
+                >
+                  Ver exemplo
+                </Button>
+              </a>
 
             </div>
 
