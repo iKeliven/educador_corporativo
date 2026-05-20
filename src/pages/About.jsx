@@ -125,13 +125,13 @@ export default function About() {
 
             <div className={styles.heroActions}>
 
-              <Button size="lg">
+              {/*<Button size="lg">
                 Criar jornada
-              </Button>
+              </Button>*/}
 
               <Button
                 size="lg"
-                variant="secondary"
+                onClick={}
               >
                 Ver exemplo
               </Button>
