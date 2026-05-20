@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   LuArrowLeft,
   LuKeyRound,
+  LuEye,
+  LuEyeOff,
 } from "react-icons/lu";
 
 import styles from "./Login.module.css";
@@ -34,6 +36,12 @@ export default function Login() {
     useState("");
 
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [rememberMe, setRememberMe] =
+    useState(false);
 
   async function handleLogin(event) {
 
@@ -162,15 +170,39 @@ export default function Login() {
             }
           />
 
-          <Input
-            label="Senha"
-            type="password"
-            placeholder="Digite sua senha"
-            value={senha}
-            onChange={(event) =>
-              setSenha(event.target.value)
-            }
-          />
+          <div className={styles.passwordField}>
+
+            <Input
+              label="Senha"
+              type={
+                showPassword
+                  ? "text"
+                  : "password"
+              }
+              placeholder="Digite sua senha"
+              value={senha}
+              onChange={(event) =>
+                setSenha(event.target.value)
+              }
+            />
+
+            <button
+              type="button"
+              className={styles.eyeButton}
+              onClick={() =>
+                setShowPassword(!showPassword)
+              }
+            >
+
+              {
+                showPassword
+                  ? <LuEyeOff />
+                  : <LuEye />
+              }
+
+            </button>
+
+          </div>
 
           {
             message && (
@@ -182,7 +214,25 @@ export default function Login() {
               </Subtitle>
             )
           }
+          <div className={styles.rememberRow}>
 
+            <label className={styles.checkbox}>
+
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={() =>
+                  setRememberMe(!rememberMe)
+                }
+              />
+
+              <span>
+                Lembrar acesso
+              </span>
+
+            </label>
+
+          </div>
           <Button
             size="lg"
             type="submit"

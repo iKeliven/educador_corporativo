@@ -131,7 +131,7 @@ export default function About() {
               </Button>*/}
 
               <a
-                href="https://educadorcoporativo.netlify.app/jornada/pedagogica"
+                href="https://educadorcoporativo.netlify.app/jornada/lideranca"
                 target="_blank"
                 rel="noreferrer"
               >
