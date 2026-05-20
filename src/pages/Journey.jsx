@@ -78,7 +78,7 @@ export default function Journey() {
     0
   );
 
-  if (loading) {
+  if (loading && !journey) {
     return (
       <MainLayout>
         <Loading />
@@ -128,33 +128,25 @@ export default function Journey() {
         ]}
       />
 
-      <motion.section
+      <section
         className={styles.timeline}
         id="start"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.45 }}
+
       >
-        <motion.div
+        <div
           className={styles.line}
-          initial={{ scaleY: 0 }}
-          whileInView={{ scaleY: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+
         />
 
-        <motion.div
+        <div
           className={styles.start}
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
+
         >
           Início
-        </motion.div>
+        </div>
 
         {trails.map((trail, index) => (
-          <motion.div
+          <div
             key={trail.id}
             className={`
               ${styles.item}
@@ -225,9 +217,9 @@ export default function Journey() {
                 )}
               </div>
             </motion.article>
-          </motion.div>
+          </div>
         ))}
-      </motion.section>
+      </section>
     </MainLayout>
   );
 }
