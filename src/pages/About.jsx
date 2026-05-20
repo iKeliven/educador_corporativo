@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./About.module.css";
 
@@ -77,6 +78,12 @@ export default function About() {
     { icon: <LuTarget />, label: "Programas de capacitação" },
   ];
 
+  const navigate = useNavigate();
+
+  function handlePreview() {
+    navigate("/jornada/pedagogica");
+  }
+
   return (
     <MainLayout>
 
@@ -131,7 +138,8 @@ export default function About() {
 
               <Button
                 size="lg"
-                onClick={}
+                variant="secondary"
+                onClick={handlePreview}
               >
                 Ver exemplo
               </Button>
