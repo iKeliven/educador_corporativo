@@ -1,15 +1,15 @@
 .card {
-    padding: 30px;
-    border-radius: 2.8rem;
-    background: rgba(19, 34, 56, 0.85);
-    border: 1px solid var(--border);
-    box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    border-radius: var(--radius);
+    background: var(--light-transparent);
+    box-shadow: var(--shadow-gold);
     transition: var(--transition);
+    position: relative;
+
 }
 
 .card:hover {
-    transform: translateY(-0.4rem);
-    border-color: rgba(212, 175, 55, 0.35);
+    transform: translateY(-0.3rem);
 }
 
 .cardHeader {
@@ -41,9 +41,99 @@
 
 .actions {
     padding-top: 1.5rem;
-    border-top: 0.5px solid rgba(255, 255, 255, 0.7);
+    border-top: 1px solid var(--white);
 
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+}
+
+.linkBox {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.linkLabel {
+    font-size: 0.8rem;
+    color: var(--gold);
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.slug {
+    color: var(--white);
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.confirmOverlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1.5rem;
+
+    background: var(--light-transparent);
+    backdrop-filter: blur(8px);
+
+    border-radius: var(--radius);
+
+    z-index: 30;
+}
+
+.confirmBox {
+    width: 100%;
+    max-width: 340px;
+
+    padding: 1.6rem;
+
+    border-radius: 1.4rem;
+
+    background:  rgba(238, 66, 66, 0.35);
+    border: 2px solid var(--color-danger);
+
+    box-shadow:
+        0 20px 40px rgba(251, 145, 145, 0.35);
+
+    animation: fadeUp .2s ease;
+}
+
+.confirmTitle {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.confirmText {
+    margin-top: 0.6rem;
+
+    color: rgba(255, 255, 255, .7);
+
+    font-size: .92rem;
+    line-height: 1.5;
+}
+
+.confirmActions {
+    margin-top: 1.4rem;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }

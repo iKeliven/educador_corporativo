@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 import styles from "./About.module.css";
 
 import MainLayout from "../layouts/MainLayout";
@@ -27,32 +29,38 @@ import {
 } from "react-icons/lu";
 
 export default function About() {
+
   const features = [
     {
       icon: <LuBookOpen />,
       title: "Jornadas personalizadas",
       text: "Criação de jornadas corporativas adaptadas para cada empresa.",
     },
+
     {
       icon: <LuPenLine />,
       title: "Edição de trilhas",
       text: "Cadastro e edição de trilhas de aprendizagem de forma simples.",
     },
+
     {
       icon: <LuLink />,
       title: "Links exclusivos",
       text: "Cada jornada gera um link único para compartilhamento.",
     },
+
     {
       icon: <LuLayoutTemplate />,
       title: "Infográfico interativo",
       text: "Estrutura visual padronizada em formato de infográfico.",
     },
+
     {
       icon: <LuPanelTop />,
       title: "Painel administrativo",
       text: "Gerenciamento dos conteúdos em uma área restrita.",
     },
+
     {
       icon: <LuMonitorSmartphone />,
       title: "Responsivo",
@@ -71,34 +79,89 @@ export default function About() {
 
   return (
     <MainLayout>
+
       <Header />
 
-      <section className={styles.hero}>
-        <div className={styles.container}>
-          <div className={styles.heroContent}>
-            <Badge>Sobre a plataforma</Badge>
+      {/* HERO */}
+      <motion.section
+        className={styles.hero}
 
-            <Title size="bg" highlight="corporativa">
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+
+        transition={{ duration: 0.5 }}
+      >
+
+        <div className={styles.container}>
+
+          <motion.div
+            className={styles.heroContent}
+
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+
+            transition={{ duration: 0.5 }}
+          >
+
+            <Badge>
+              Sobre a plataforma
+            </Badge>
+
+            <Title
+              size="bg"
+              highlight="corporativa"
+            >
               Jornada visual para aprendizagem
             </Title>
 
-            <Subtitle size="md" variant="light">
+            <Subtitle
+              size="md"
+              variant="light"
+            >
               Uma plataforma para transformar treinamentos corporativos em
               experiências visuais interativas, organizadas e fáceis de
               compartilhar.
             </Subtitle>
 
             <div className={styles.heroActions}>
-              <Button size="lg">Criar jornada</Button>
 
-              <Button size="lg" variant="secondary">
+              <Button size="lg">
+                Criar jornada
+              </Button>
+
+              <Button
+                size="lg"
+                variant="secondary"
+              >
                 Ver exemplo
               </Button>
-            </div>
-          </div>
 
-          <div className={styles.heroVisual}>
-            <div className={styles.mockup}>
+            </div>
+
+          </motion.div>
+
+          <motion.div
+            className={styles.heroVisual}
+
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+
+            transition={{
+              duration: 0.5,
+              delay: 0.15,
+            }}
+          >
+
+            <motion.div
+              className={styles.mockup}
+
+              whileHover={{
+                y: -8,
+              }}
+
+              transition={{ duration: 0.3 }}
+            >
+
               <div className={styles.mockupHeader}>
                 <span></span>
                 <span></span>
@@ -106,39 +169,112 @@ export default function About() {
               </div>
 
               <div className={styles.mockupBody}>
+
                 <div className={styles.timelineLine}></div>
 
-                <div className={`${styles.mockupCard} ${styles.left}`}>
+                <motion.div
+                  className={`${styles.mockupCard} ${styles.left}`}
+
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+
+                  viewport={{ once: true }}
+
+                  transition={{ delay: 0.1 }}
+                >
+
                   <strong>01</strong>
-                  <Subtitle size="lg" variant="light">
+
+                  <Subtitle
+                    size="lg"
+                    variant="light"
+                  >
                     Introdução
                   </Subtitle>
-                </div>
 
-                <div className={`${styles.mockupCard} ${styles.right}`}>
+                </motion.div>
+
+                <motion.div
+                  className={`${styles.mockupCard} ${styles.right}`}
+
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+
+                  viewport={{ once: true }}
+
+                  transition={{ delay: 0.2 }}
+                >
+
                   <strong>02</strong>
-                  <Subtitle size="lg" variant="light">
+
+                  <Subtitle
+                    size="lg"
+                    variant="light"
+                  >
                     Atividade
                   </Subtitle>
-                </div>
 
-                <div className={`${styles.mockupCard} ${styles.left}`}>
+                </motion.div>
+
+                <motion.div
+                  className={`${styles.mockupCard} ${styles.left}`}
+
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+
+                  viewport={{ once: true }}
+
+                  transition={{ delay: 0.3 }}
+                >
+
                   <strong>03</strong>
-                  <Subtitle size="lg" variant="light">
+
+                  <Subtitle
+                    size="lg"
+                    variant="light"
+                  >
                     Certificação
                   </Subtitle>
-                </div>
+
+                </motion.div>
+
               </div>
-            </div>
 
-            <div className={styles.floatingIcon}>
+            </motion.div>
+
+            <motion.div
+              className={styles.floatingIcon}
+
+              animate={{
+                y: [0, -10, 0],
+              }}
+
+              transition={{
+                repeat: Infinity,
+                duration: 2.5,
+              }}
+            >
               <LuSparkles />
-            </div>
-          </div>
-        </div>
-      </section>
+            </motion.div>
 
-      <section className={styles.textSection}>
+          </motion.div>
+
+        </div>
+
+      </motion.section>
+
+      {/* TEXTO */}
+      <motion.section
+        className={styles.textSection}
+
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+
+        viewport={{ once: true }}
+
+        transition={{ duration: 0.45 }}
+      >
+
         <img
           src={aboutImg}
           alt="Evento Corporativo"
@@ -146,139 +282,316 @@ export default function About() {
         />
 
         <div className={styles.textContainer}>
-          <Subtitle size="sm" variant="light">
+
+          <Subtitle
+            size="sm"
+            variant="light"
+          >
             A plataforma foi desenvolvida para transformar treinamentos
             corporativos em experiências visuais interativas e organizadas.
           </Subtitle>
 
-          <Subtitle size="sm" variant="light">
+          <Subtitle
+            size="sm"
+            variant="light"
+          >
             Por meio de um sistema simples de gerenciamento, é possível criar
             jornadas de aprendizagem personalizadas para cada empresa,
             centralizando conteúdos, materiais, atividades, links, vídeos e
             trilhas de desenvolvimento em um único ambiente.
           </Subtitle>
 
-          <Subtitle size="sm" variant="light">
+          <Subtitle
+            size="sm"
+            variant="light"
+          >
             Cada jornada gera um link exclusivo, permitindo compartilhar
             facilmente o infográfico com participantes, equipes e colaboradores.
           </Subtitle>
+
         </div>
-      </section>
 
-      <section className={styles.proposal}>
+      </motion.section>
+
+      {/* PROPOSTA */}
+      <motion.section
+        className={styles.proposal}
+
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+
+        viewport={{ once: true }}
+
+        transition={{ duration: 0.5 }}
+      >
+
         <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <Badge>Proposta</Badge>
 
-            <Title size="bg">O que a plataforma une</Title>
+          <div className={styles.sectionHeader}>
+
+            <Badge>
+              Proposta
+            </Badge>
+
+            <Title size="bg">
+              O que a plataforma une
+            </Title>
+
           </div>
 
           <div className={styles.proposalGrid}>
-            <div>
-              <Subtitle size="bg" align="center" variant="gold" weight="bold">
-                Organização de conteúdos
-              </Subtitle>
-            </div>
 
-            <div>
-              <Subtitle size="bg" align="center" variant="gold" weight="bold">
-                Experiência visual moderna
-              </Subtitle>
-            </div>
+            {[
+              "Organização de conteúdos",
+              "Experiência visual moderna",
+              "Facilidade de edição",
+              "Padronização de treinamentos",
+              "Autonomia para gestão das trilhas",
+            ].map((item, index) => (
 
-            <div>
-              <Subtitle size="bg" align="center"  variant="gold" weight="bold">
-                Facilidade de edição
-              </Subtitle>
-            </div>
+              <motion.div
+                key={index}
 
-            <div>
-              <Subtitle size="bg" align="center"  variant="gold" weight="bold">
-                Padronização de treinamentos
-              </Subtitle>
-            </div>
+                initial={{
+                  opacity: 0,
+                  y: 30,
+                }}
 
-            <div>
-              <Subtitle size="bg" align="center"  variant="gold" weight="bold">
-                Autonomia para gestão das trilhas
-              </Subtitle>
-            </div>
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+
+                viewport={{ once: true }}
+
+                transition={{
+                  delay: index * 0.08,
+                }}
+              >
+
+                <Subtitle
+                  size="bg"
+                  align="center"
+                  variant="gold"
+                  weight="bold"
+                >
+                  {item}
+                </Subtitle>
+
+              </motion.div>
+
+            ))}
+
           </div>
+
         </div>
-      </section>
 
+      </motion.section>
+
+      {/* FEATURES */}
       <section className={styles.features}>
+
         <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <Badge>Funcionalidades</Badge>
 
-            <Title size="bg">Principais recursos</Title>
+          <motion.div
+            className={styles.sectionHeader}
 
-            <Subtitle size="bg" variant="light">
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+
+            viewport={{ once: true }}
+          >
+
+            <Badge>
+              Funcionalidades
+            </Badge>
+
+            <Title size="bg">
+              Principais recursos
+            </Title>
+
+            <Subtitle
+              size="bg"
+              variant="light"
+            >
               Tudo que a professora precisa para criar, editar e compartilhar
               jornadas corporativas.
             </Subtitle>
-          </div>
+
+          </motion.div>
 
           <div className={styles.featureGrid}>
+
             {features.map((item, index) => (
-              <article key={index} className={styles.featureCard}>
-                <div className={styles.icon}>{item.icon}</div>
 
-                <Title size="md">{item.title}</Title>
+              <motion.article
+                key={index}
+                className={styles.featureCard}
 
-                <Subtitle size="md" variant="light">
+                initial={{
+                  opacity: 0,
+                  y: 40,
+                }}
+
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+
+                whileHover={{
+                  y: -8,
+                }}
+
+                viewport={{ once: true }}
+
+                transition={{
+                  duration: 0.35,
+                  delay: index * 0.06,
+                }}
+              >
+
+                <div className={styles.icon}>
+                  {item.icon}
+                </div>
+
+                <Title size="md">
+                  {item.title}
+                </Title>
+
+                <Subtitle
+                  size="md"
+                  variant="light"
+                >
                   {item.text}
                 </Subtitle>
-              </article>
+
+              </motion.article>
+
             ))}
+
           </div>
+
         </div>
+
       </section>
 
-      <section className={styles.objective}>
+      {/* OBJETIVO */}
+      <motion.section
+        className={styles.objective}
+
+        initial={{ opacity: 0, scale: 0.96 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+
+        viewport={{ once: true }}
+
+        transition={{ duration: 0.45 }}
+      >
+
         <div className={styles.objectiveCard}>
+
           <div className={styles.objectiveIcon}>
             <LuTarget />
           </div>
 
           <div>
-            <Badge>Objetivo</Badge>
+
+            <Badge>
+              Objetivo
+            </Badge>
 
             <Title size="bg">
               Facilitar a gestão e distribuição de conteúdos educacionais
               corporativos.
             </Title>
 
-            <Subtitle size="bg" variant="light">
+            <Subtitle
+              size="bg"
+              variant="light"
+            >
               Tornando a aprendizagem mais acessível, visual e organizada para
               empresas, equipes e participantes.
             </Subtitle>
+
           </div>
+
         </div>
-      </section>
 
+      </motion.section>
+
+      {/* PUBLICO */}
       <section className={styles.audience}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <Badge>Público-alvo</Badge>
 
-            <Title size="bg">Para quem foi pensada</Title>
-          </div>
+        <div className={styles.container}>
+
+          <motion.div
+            className={styles.sectionHeader}
+
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+
+            viewport={{ once: true }}
+          >
+
+            <Badge>
+              Público-alvo
+            </Badge>
+
+            <Title size="bg">
+              Para quem foi pensada
+            </Title>
+
+          </motion.div>
 
           <div className={styles.audienceGrid}>
-            {audiences.map((item, index) => (
-              <div key={index} className={styles.audienceItem}>
-                <span>{item.icon}</span>
 
-                <Subtitle size="bg" variant="light">
+            {audiences.map((item, index) => (
+
+              <motion.div
+                key={index}
+                className={styles.audienceItem}
+
+                initial={{
+                  opacity: 0,
+                  scale: 0.9,
+                }}
+
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+
+                whileHover={{
+                  y: -6,
+                }}
+
+                viewport={{ once: true }}
+
+                transition={{
+                  delay: index * 0.06,
+                }}
+              >
+
+                <span>
+                  {item.icon}
+                </span>
+
+                <Subtitle
+                  size="bg"
+                  variant="light"
+                >
                   {item.label}
                 </Subtitle>
-              </div>
+
+              </motion.div>
+
             ))}
+
           </div>
+
         </div>
+
       </section>
+
     </MainLayout>
   );
 }

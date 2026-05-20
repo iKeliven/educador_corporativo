@@ -193,7 +193,7 @@
     padding: 3rem;
 
     border-radius: 2.4rem;
-    background: var(--navy-transparent);
+    background: var(--light-transparent);
     border: 1px solid transparent;
     transition: var(--transition);
 }

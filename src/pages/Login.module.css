@@ -15,9 +15,24 @@
   max-width: 48rem;
   padding: 4rem;
   border-radius: 3rem;
-  background: rgba(19, 34, 56, 0.85);
+  background: var(--light-transparent);
   border: 1px solid var(--border);
-  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-gold);
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.close {
+  font-size: 2rem;
+  color: var(--white);
+}
+
+.logo{
+  width: 160px;
 }
 
 .header {
@@ -32,19 +47,20 @@
   font-weight: 700;
 }
 
-.header h1 {
-  margin-top: 1.4rem;
-  font-size: 3.2rem;
-}
-
-.header p {
-  margin-top: 1rem;
-  color: var(--text);
-  line-height: 1.6;
-}
-
 .form {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.forgot {
+  border: none;
+  margin-top: 1.5rem;
+  color: var(--white);
+  display: flex;
+  gap: 8px;
+  font-weight: 200;
+  text-decoration: underline;
+  align-items: center;
+  background: transparent;
 }

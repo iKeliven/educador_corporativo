@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styles from "./JourneyForm.module.css";
 
 import MainLayout from "../layouts/MainLayout";
@@ -8,98 +11,211 @@ import Button from "../components/UI/Button";
 import Badge from "../components/UI/Badge";
 import Title from "../components/UI/Title";
 import Subtitle from "../components/UI/Subtitle";
+import Select from "../components/UI/Select";
+
+import { supabase } from "../services/supabase";
 
 export default function CreateJourney() {
+  const navigate = useNavigate();
 
-    function handleSubmit(event) {
-        event.preventDefault();
+  const [errorMessage, setErrorMessage] = useState("");
 
-        console.log("CRIAR JORNADA");
+  const [form, setForm] = useState({
+    company: "",
+    slug: "",
+    title: "",
+    type: "",
+    customType: "",
+    description: "",
+  });
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setForm((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    setErrorMessage("");
+
+    if (!form.company.trim()) {
+      setErrorMessage("Informe o nome da empresa.");
+      return;
     }
 
-    return (
-        <MainLayout>
-            <Header />
+    if (!form.slug.trim()) {
+      setErrorMessage("Informe o slug da jornada.");
+      return;
+    }
 
-            <section className={styles.page}>
-                <div className={styles.container}>
+    if (!form.title.trim()) {
+      setErrorMessage("Informe o título da jornada.");
+      return;
+    }
 
-                    <div className={styles.header}>
-                        <Badge>
-                            NOVA JORNADA
-                        </Badge>
+    if (!form.type.trim()) {
+      setErrorMessage("Selecione o tipo da jornada.");
+      return;
+    }
 
-                        <Title size="bg">
-                            Criar trilha corporativa
-                        </Title>
+    if (form.type === "Outro" && !form.customType.trim()) {
+      setErrorMessage("Informe o tipo personalizado.");
+      return;
+    }
 
-                        <Subtitle>
-                            Cadastre uma nova jornada personalizada
-                            para treinamentos e eventos.
-                        </Subtitle>
-                    </div>
+    if (!form.description.trim()) {
+      setErrorMessage("Informe a descrição da jornada.");
+      return;
+    }
 
-                    <form
-                        className={styles.form}
-                        onSubmit={handleSubmit}
-                    >
+    const finalType =
+      form.type === "Outro"
+        ? form.customType.trim()
+        : form.type;
 
-                        <div className={styles.grid}>
-                            <Input
-                                label="Empresa"
-                                placeholder="Nome da empresa"
-                            />
+    const payload = {
+      company: form.company.trim(),
+      slug: form.slug
+        .trim()
+        .toLowerCase()
+        .replaceAll(" ", "-"),
+      title: form.title.trim(),
+      description: form.description.trim(),
+      type: finalType,
+    };
 
-                            <Input
-                                label="Slug"
-                                placeholder="empresa-lideranca"
-                            />
-                        </div>
-                        <div className={styles.grid}>
-                            <Input
-                                label="Título da Jornada"
-                                placeholder="Jornada de Liderança"
-                            />
-                            <Input
-                                label="Carga Horária"
-                                placeholder="20h"
-                            />
-                        </div>
-                        <Input
-                            textarea
-                            label="Descrição"
-                            placeholder="Descrição da jornada..."
-                        />
-                        <div className={styles.sectionHeader}>
-                            <div>
-                                <h2>Trilhas da jornada</h2>
-                                <p>Adicione os cards que aparecerão no infográfico.</p>
-                            </div>
+    const { data, error } = await supabase
+      .from("journeys")
+      .insert([payload])
+      .select()
+      .single();
 
-                            <Button size="sm" onClick={() => setIsModalOpen(true)}>
-                                + Adicionar trilha
-                            </Button>
-                        </div>
+    if (error) {
+      console.log(error.message);
 
-                        <div className={styles.actions}>
-                            <Button
-                                variant="ghost"
-                                size="lg"
-                            >
-                                Cancelar
-                            </Button>
+      setErrorMessage(
+        "Erro ao criar jornada. Verifique se o slug já existe."
+      );
 
-                            <Button size="lg">
-                                Criar Jornada
-                            </Button>
-                        </div>
-                        <JourneyTrailModal
-                            isOpen={isModalOpen}
-                            onClose={() => setIsModalOpen(false)}
-                        />
-                    </form>
-                </div>
-            </section>
-        </MainLayout>
-    );
+      return;
+    }
+
+    navigate(`/dashboard/journeys/${data.id}/edit`);
+  }
+
+  return (
+    <MainLayout>
+      <Header isAuthenticated />
+
+      <section className={styles.page}>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <Badge>NOVA JORNADA</Badge>
+
+            <Title size="bg">
+              Criar trilha corporativa
+            </Title>
+
+            <Subtitle>
+              Cadastre uma nova jornada personalizada para treinamentos e
+              eventos.
+            </Subtitle>
+          </div>
+
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.grid}>
+              <Input
+                label="Empresa"
+                name="company"
+                placeholder="Nome da empresa"
+                value={form.company}
+                onChange={handleChange}
+              />
+
+              <Input
+                label="Slug"
+                name="slug"
+                placeholder="empresa-lideranca"
+                value={form.slug}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={styles.grid}>
+              <Select
+                label="Tipo da jornada"
+                name="type"
+                value={form.type}
+                onChange={handleChange}
+                options={[
+                  "Workshop",
+                  "Treinamento",
+                  "Certificação",
+                  "Mentoria",
+                  "Onboarding",
+                  "Capacitação",
+                  "Imersão",
+                  "Bootcamp",
+                  "Outro",
+                ]}
+              />
+
+              {form.type === "Outro" && (
+                <Input
+                  label="Tipo personalizado"
+                  name="customType"
+                  placeholder="Ex: Residência"
+                  value={form.customType}
+                  onChange={handleChange}
+                />
+              )}
+            </div>
+
+            <Input
+              label="Título da Jornada"
+              name="title"
+              placeholder="Jornada de Liderança"
+              value={form.title}
+              onChange={handleChange}
+            />
+
+            <Input
+              textarea
+              label="Descrição"
+              name="description"
+              placeholder="Descrição da jornada..."
+              value={form.description}
+              onChange={handleChange}
+            />
+
+            {errorMessage && (
+              <Subtitle size="sm" variant="error">
+                {errorMessage}
+              </Subtitle>
+            )}
+
+            <div className={styles.actions}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                onClick={() => navigate("/dashboard")}
+              >
+                Cancelar
+              </Button>
+
+              <Button type="submit" size="lg">
+                Criar Jornada
+              </Button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </MainLayout>
+  );
 }

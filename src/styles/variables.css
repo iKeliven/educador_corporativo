@@ -5,7 +5,7 @@
     --gold: #cbba8a;
     --gold-soft: #e8d4a3;
     --gold-transparent: rgba(212, 175, 55, .12);
-
+    --light-transparent: rgba(255, 255, 255, 0.15);
     --white: #f8fafc;
     --gray: #cbd5e1;
     --gray-transparent: rgba(255, 255, 255, 0.4);

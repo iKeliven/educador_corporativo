@@ -1,4 +1,4 @@
-// components/JourneyHowWorks/JourneyHowWorks.jsx
+import { motion } from "framer-motion";
 
 import styles from "./JourneyHowWorks.module.css";
 
@@ -13,6 +13,7 @@ import {
 } from "react-icons/lu";
 
 export default function JourneyHowWorks() {
+
   const steps = [
     {
       icon: <LuLayoutTemplate />,
@@ -37,9 +38,24 @@ export default function JourneyHowWorks() {
   ];
 
   return (
-    <section className={styles.section}>
+    <motion.section
+      className={styles.section}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+
       <div className={styles.container}>
-        <div className={styles.header}>
+
+        <motion.div
+          className={styles.header}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45 }}
+        >
+
           <Badge>
             COMO FUNCIONA
           </Badge>
@@ -49,24 +65,72 @@ export default function JourneyHowWorks() {
             <span> com o mesmo template</span>
           </Title>
 
-          <Subtitle size="md">
+          <Subtitle
+            size="bg"
+            variant="light"
+          >
             Crie experiências visuais padronizadas
             para treinamentos corporativos com
             trilhas personalizadas para cada empresa.
           </Subtitle>
-        </div>
+
+        </motion.div>
 
         <div className={styles.grid}>
+
           {steps.map((step, index) => (
-            <article
+
+            <motion.article
               key={index}
               className={styles.card}
-            >
-              <div className={styles.icon}>
-                {step.icon}
-              </div>
 
-              <Title >
+              initial={{
+                opacity: 0,
+                y: 40,
+              }}
+
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+
+              whileHover={{
+                y: -8,
+                scale: 1.02,
+              }}
+
+              viewport={{ once: true }}
+
+              transition={{
+                duration: 0.35,
+                delay: index * 0.12,
+              }}
+            >
+
+              <motion.div
+                className={styles.icon}
+
+                initial={{
+                  scale: 0.7,
+                  opacity: 0,
+                }}
+
+                whileInView={{
+                  scale: 1,
+                  opacity: 1,
+                }}
+
+                viewport={{ once: true }}
+
+                transition={{
+                  duration: 0.3,
+                  delay: 0.15 + index * 0.12,
+                }}
+              >
+                {step.icon}
+              </motion.div>
+
+              <Title>
                 {step.title}
               </Title>
 
@@ -74,13 +138,36 @@ export default function JourneyHowWorks() {
                 {step.description}
               </Subtitle>
 
-              <span className={styles.number}>
+              <motion.span
+                className={styles.number}
+
+                initial={{
+                  opacity: 0,
+                  scale: 0.8,
+                }}
+
+                whileInView={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+
+                viewport={{ once: true }}
+
+                transition={{
+                  delay: 0.25 + index * 0.12,
+                }}
+              >
                 0{index + 1}
-              </span>
-            </article>
+              </motion.span>
+
+            </motion.article>
+
           ))}
+
         </div>
+
       </div>
-    </section>
+
+    </motion.section>
   );
 }

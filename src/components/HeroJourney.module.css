@@ -3,8 +3,8 @@
 .hero {
     position: relative;
     min-height: 90vh;
-    overflow: hidden;
-
+    z-index: 1;
+    overflow: visible;
 }
 
 .container {

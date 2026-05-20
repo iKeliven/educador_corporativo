@@ -35,7 +35,7 @@
   border-radius: 3.2rem;
 
   background:
-    rgba(19,34,56,.65);
+    var(--light-transparent);
 
   border:
     1px solid var(--border);
@@ -51,7 +51,7 @@
   transform: translateY(-.6rem);
 
   border-color:
-    rgba(212,175,55,.25);
+    rgba(212, 175, 55, .25);
 }
 
 .icon {
@@ -65,10 +65,10 @@
   border-radius: var(--radius);
 
   margin-bottom: 2rem;
-  background:var(--gold-transparent);
+  background: var(--gold-transparent);
 
   border:
-    1px solid rgba(212,175,55,.15);
+    1px solid rgba(212, 175, 55, .15);
 
   color: var(--gold);
 
@@ -101,21 +101,28 @@
   font-weight: 700;
 
   color:
-    rgba(255,255,255,.04);
+    rgba(255, 255, 255, .1);
 
   pointer-events: none;
 }
 
 @media (max-width: 768px) {
   .section {
-    padding: 8rem 2rem;
+    padding: 6rem 2rem;
   }
 
   .card {
-    padding: 3rem;
+    padding: 1.6rem;
   }
 
   .title {
     font-size: 2.2rem;
   }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
 }

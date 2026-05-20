@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
 import styles from "./Dashboard.module.css";
 
 import Button from "../components/UI/Button";
@@ -7,50 +10,134 @@ import Card from "../components/Card";
 import Badge from "../components/UI/Badge";
 import Title from "../components/UI/Title";
 import Subtitle from "../components/UI/Subtitle";
+import Loading from "../components/UI/Loading";
+
+import { supabase } from "../services/supabase";
 
 export default function Dashboard() {
-  const journeys = [
-    {
-      id: 1,
-      company: "SENAI",
-      title: "Jornada de Liderança",
-      slug: "senai-lideranca",
-      count: 5,
-    },
-    {
-      id: 2,
-      company: "Empresa XPTO",
-      title: "Trilha de Cultura Organizacional",
-      slug: "empresa-xpto-cultura",
-      count: 3,
-    },
-  ];
+  const navigate = useNavigate();
+
+  const [journeys, setJourneys] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadJourneys() {
+      const { data, error } = await supabase
+        .from("journeys")
+        .select(`
+          *,
+          trails (
+            id
+          )
+        `)
+        .order("created_at", {
+          ascending: false,
+        });
+
+      if (error) {
+        console.log(error.message);
+        setLoading(false);
+        return;
+      }
+
+      const formattedJourneys = data.map((journey) => ({
+        ...journey,
+        count: journey.trails?.length || 0,
+      }));
+
+      setJourneys(formattedJourneys);
+      setLoading(false);
+    }
+
+    loadJourneys();
+  }, []);
+
+  function handleEdit(journey) {
+    navigate(`/dashboard/journeys/${journey.id}/edit`);
+  }
+
+  function handlePreview(journey) {
+    window.open(`/jornada/${journey.slug}`, "_blank");
+  }
+
+  async function handleDelete(journey) {
+    const confirmDelete = confirm(
+      `Deseja excluir a jornada "${journey.title}"?`
+    );
+
+    if (!confirmDelete) return;
+
+    const { error } = await supabase
+      .from("journeys")
+      .delete()
+      .eq("id", journey.id);
+
+    if (error) {
+      console.log(error.message);
+      alert("Erro ao excluir jornada.");
+      return;
+    }
+
+    setJourneys((current) =>
+      current.filter((item) => item.id !== journey.id)
+    );
+  }
+
+  if (loading) {
+    return (
+      <MainLayout>
+        <Header isAuthenticated />
+        <Loading />
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
-      <Header />
+      <Header isAuthenticated />
 
       <div className={styles.container}>
         <header className={styles.header}>
           <div>
             <Badge>Painel administrativo</Badge>
+
             <Title size="bg">Jornadas cadastradas</Title>
+
             <Subtitle variant="light" size="bg">
               Gerencie os infográficos enviados para cada empresa.
             </Subtitle>
           </div>
 
-          <Button size="lg">Nova Jornada</Button>
+          <Link to="/dashboard/journeys/new">
+            <Button size="lg">
+              Nova Jornada
+            </Button>
+          </Link>
         </header>
 
-        <section className={styles.grid}>
-          {journeys.map((journey) => (
-            <Card
-              key={journey.id}
-              journey={journey}
-            />
-          ))}
-        </section>
+        {journeys.length === 0 ? (
+          <div className={styles.empty}>
+            <Title size="md">
+              Nenhuma jornada cadastrada
+            </Title>
+
+            <Subtitle size="sm" variant="light">
+              Crie sua primeira jornada corporativa.
+            </Subtitle>
+          </div>
+        ) : (
+          <section className={styles.grid}>
+            {journeys.map((journey) => (
+              <Card
+                key={journey.id}
+                journey={journey}
+                onEdit={() => handleEdit(journey)}
+                onPreview={() => handlePreview(journey)}
+                onDelete={() => handleDelete(journey)}
+              />
+            ))}
+          </section>
+        )}
       </div>
     </MainLayout>
   );

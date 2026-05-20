@@ -7,7 +7,7 @@
 .label {
   font-size: 1rem;
   font-weight: 300;
-  color: var(--text);
+  color: var(--white);
 }
 
 /* INPUT + TEXTAREA */
@@ -16,7 +16,7 @@
   width: 100%;
   border-radius: var(--radius);
   border: 1px solid var(--gray-transparent);
-  background: var(--navy-transparent);
+  background: var(--light-transparent);
   color: var(--white);
 
   outline: none;
@@ -33,13 +33,10 @@
 
 /* TEXTAREA */
 .textarea {
-  min-height: 12rem;
-
+  min-height: 4rem;
   padding: 1.4rem;
-
   resize: vertical;
-
-  line-height: 1.7;
+  line-height: 1.5;
 }
 
 /* FOCUS */

@@ -1,102 +1,95 @@
-.trailsSection {
-  margin-top: 4rem;
-}
-
-.sectionHeader {
-  padding: 2rem;
-  border-radius: 2rem;
-  background: rgba(19, 34, 56, 0.55);
-  border: 1px solid var(--border);
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-}
-
-.sectionHeader h2 {
-  font-size: 2rem;
-}
-
-.sectionHeader p {
-  margin-top: 0.4rem;
-  color: var(--text);
-  font-size: 1.4rem;
-}
-
-.trailsList {
-  margin-top: 1.6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.trailItem {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 1.6rem;
-  align-items: center;
-
-  padding: 1.6rem;
-  border-radius: 1.8rem;
-
-  background: rgba(15, 23, 42, 0.72);
-  border: 1px solid var(--border);
-}
-
-.trailOrder {
-  width: 4rem;
-  height: 4rem;
-  border-radius: 50%;
-
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: rgba(212, 175, 55, 0.12);
-  border: 1px solid rgba(212, 175, 55, 0.25);
-  color: var(--gold);
-  font-weight: 700;
+  padding: 2rem;
+  background: var(--gray-transparent);
+  backdrop-filter: blur(7px);
 }
 
-.trailContent h3 {
-  font-size: 1.7rem;
+.modal {
+  width: 100%;
+  max-width: 58rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 1.8rem;
+  border-radius: var(--radius);
+  background: var(--navy-transparent);
+  box-shadow: var(--shadow-gold);
+  position: relative;
+  z-index: 10000;
 }
 
-.trailContent p {
-  margin-top: 0.4rem;
-  color: var(--text);
-  font-size: 1.4rem;
-}
 
-.trailMeta {
-  margin-top: 0.8rem;
+.header {
   display: flex;
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  align-items: self-start;
+}
+
+.close {
+  background-color: transparent;
+  color: var(--white);
+  border: none;
+  transition: var(--transition);
+  font-size: 2rem;
+  font-weight: 300;
+  margin-top: -1rem;
+}
+
+.close:hover {
+  transform: scale(1.2);
+  font-weight: bold;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
-  flex-wrap: wrap;
 }
 
-.trailMeta span {
-  font-size: 1.2rem;
-  color: var(--gold);
+.form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.4rem;
+  align-items: center;
+  color: var(--white);
 }
 
-.trailActions {
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  color: var(--white);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+
+.actions {
   display: flex;
-  gap: 0.8rem;
+  width: 100%;
+  justify-content: end;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 @media (max-width: 768px) {
-  .sectionHeader {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .trailItem {
+  .grid {
     grid-template-columns: 1fr;
   }
 
-  .trailActions {
+  .actions {
     flex-direction: column;
+    gap: 1.5rem;
   }
 }
