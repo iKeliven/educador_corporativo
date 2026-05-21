@@ -84,9 +84,9 @@ export default function JourneyTrailModal({
       links: current.links.map((link, i) =>
         i === index
           ? {
-              ...link,
-              [field]: value,
-            }
+            ...link,
+            [field]: value,
+          }
           : link
       ),
     }));
@@ -117,10 +117,10 @@ export default function JourneyTrailModal({
       links:
         current.links.length === 1
           ? [
-              {
-                ...emptyLink,
-              },
-            ]
+            {
+              ...emptyLink,
+            },
+          ]
           : current.links.filter((_, i) => i !== index),
     }));
   }
@@ -142,19 +142,21 @@ export default function JourneyTrailModal({
     const uploadedFiles = [];
 
     for (const file of files) {
-      const safeFileName = file.name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-zA-Z0-9._-]/g, "-");
+      const fileExtension =
+        file.name.split(".").pop();
 
-      const filePath = `${journeyId}/${Date.now()}-${safeFileName}`;
+      const safeFileName =
+        `${crypto.randomUUID()}.${fileExtension}`;
+
+      const filePath =
+        `${journeyId}/${safeFileName}`;
 
       const { error } = await supabase.storage
         .from("trail-files")
         .upload(filePath, file);
 
       if (error) {
-        console.log(error);
+        console.log("ERRO UPLOAD:", error);
 
         setErrorMessage(
           `Erro ao enviar arquivo: ${error.message}`
@@ -527,8 +529,8 @@ export default function JourneyTrailModal({
               {loading
                 ? "Salvando..."
                 : mode === "edit"
-                ? "Salvar alterações"
-                : "Adicionar trilha"}
+                  ? "Salvar alterações"
+                  : "Adicionar trilha"}
             </Button>
           </footer>
         </form>
