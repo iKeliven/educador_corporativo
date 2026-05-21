@@ -26,7 +26,11 @@
   margin-top: 2rem;
   padding: 2rem;
   border-radius: var(--radius);
-  background: var(--light-transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+    background: var(--background);
+
 }
 
 
@@ -36,11 +40,6 @@
   gap: 1.4rem;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-}
 
 .actions {
   display: flex;
@@ -208,8 +207,6 @@
   padding: 2rem;
   margin-bottom: 2rem;
   width: 100%;
-  border-radius: var(--radius);
-  background: var(--light-transparent);
 }
 
 .shareTitle {
@@ -259,7 +256,8 @@
   border-color: var(--gold-soft);
   background: var(--navy-transparent);
 }
-.trailLinks{
+
+.trailLinks {
   display: flex;
   margin-top: 20px;
   gap: 10px;

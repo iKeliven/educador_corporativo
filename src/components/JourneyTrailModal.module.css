@@ -162,7 +162,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
   margin-top: 1.5rem;
 }
-
 .attachmentsSection {
   display: flex;
   flex-direction: column;
@@ -182,7 +181,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
   background: var(--navy-transparent);
 
-  border: 1px solid rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255,255,255,.06);
 
   display: flex;
   align-items: center;

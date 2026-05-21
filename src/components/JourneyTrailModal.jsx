@@ -37,6 +37,7 @@ export default function JourneyTrailModal({
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setErrorMessage("");
 
     if (trail) {

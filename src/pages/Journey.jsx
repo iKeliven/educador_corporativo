@@ -18,7 +18,7 @@ import {
   LuGraduationCap,
   LuBookOpen,
   LuClock3,
-  LuPapperclip,
+  LuPaperclip,
 } from "react-icons/lu";
 
 export default function Journey() {

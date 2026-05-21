@@ -15,7 +15,7 @@
   max-width: 48rem;
   padding: 4rem;
   border-radius: 3rem;
-  background: var(--light-transparent);
+   background: var(--light-transparent);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-gold);
 }
