@@ -209,22 +209,23 @@ export default function Journey() {
                   {trail.description}
                 </Subtitle>
               </div>
-              {trail.attachments?.length > 0 && (
-                <div className={styles.attachments}>
-                  {trail.attachments.map((file, fileIndex) => (
-                    <a
-                      key={fileIndex}
-                      href={file.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={styles.attachmentLink}
-                    >
-                      <LuPaperclip />
-                      {file.name}
-                    </a>
-                  ))}
-                </div>
-              )}
+              {Array.isArray(trail.attachments) &&
+                trail.attachments.length > 0 && (
+                  <div className={styles.attachments}>
+                    {trail.attachments.map((file, index) => (
+                      <a
+                        key={index}
+                        href={file.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={styles.attachmentLink}
+                      >
+                        <LuPaperclip />
+                        {file.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
 
               {trail.links?.length > 0 && (
                 <div className={styles.buttonGroup}>
