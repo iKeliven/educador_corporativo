@@ -35,6 +35,8 @@ export default function JourneyTrailModal({
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [attachmentName, setAttachmentName] =
+    useState("");
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -175,8 +177,6 @@ export default function JourneyTrailModal({
         return;
       }
 
-      console.log(file.type);
-
       const fileExtension =
         file.name.split(".").pop();
 
@@ -186,7 +186,7 @@ export default function JourneyTrailModal({
       const filePath =
         `${journeyId}/${safeFileName}`;
 
-      const { error } =
+      const { data: uploadData, error } =
         await supabase.storage
 
           .from("trail-files")
@@ -213,22 +213,38 @@ export default function JourneyTrailModal({
 
         setLoading(false);
 
-        event.target.value = "";
-
         return;
       }
 
-      const { data } =
+      const {
+        data: publicUrlData,
+      } =
         supabase.storage
 
           .from("trail-files")
 
-          .getPublicUrl(filePath);
+          .getPublicUrl(
+            uploadData.path
+          );
 
       uploadedFiles.push({
-        name: file.name,
-        url: data.publicUrl,
-        path: filePath,
+
+        name:
+          attachmentName.trim()
+          || file.name,
+
+        originalName:
+          file.name,
+
+        url:
+          publicUrlData.publicUrl,
+
+        path:
+          uploadData.path,
+
+        type:
+          file.type,
+
       });
     }
 
@@ -240,6 +256,8 @@ export default function JourneyTrailModal({
         ...uploadedFiles,
       ],
     }));
+
+    setAttachmentName("");
 
     setLoading(false);
 
@@ -539,7 +557,14 @@ export default function JourneyTrailModal({
                   Máximo de 3 arquivos
                 </Subtitle>
               </div>
-
+              <Input
+                label="Nome do anexo"
+                placeholder="Ex: Material complementar"
+                value={attachmentName}
+                onChange={(event) =>
+                  setAttachmentName(event.target.value)
+                }
+              />
               <input
                 type="file"
                 multiple

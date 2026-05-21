@@ -3,7 +3,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--navy);
+  background: var(--background);
   overflow: hidden;
 }
 
@@ -22,19 +22,20 @@
   width: 40rem;
   height: 40rem;
   border-radius: 50%;
-  background: rgba(212, 175, 55, 0.1);
-  filter: blur(8rem);
+  background: rgba(244, 228, 174, 0.3);
+  filter: blur(10rem);
 }
 
 .glowBottom {
   position: absolute;
+  z-index: -99999;
   bottom: -12rem;
   right: -12rem;
   width: 50rem;
   height: 50rem;
   border-radius: 50%;
-  background: rgba(59, 130, 246, 0.1);
-  filter: blur(8rem);
+  background: rgba(50, 63, 83, 0.2);
+  filter: blur(10rem);
 }
 
 .content {

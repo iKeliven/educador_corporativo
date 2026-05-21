@@ -4,7 +4,7 @@
     --navy-transparent: rgba(2, 10, 38, 0.85);
     --gold: #cbba8a;
     --gold-soft: #e8d4a3;
-    --gold-transparent: rgba(212, 175, 55, .12);
+    --gold-transparent: rgba(212, 175, 55, .25);
     --light-transparent: rgba(255, 255, 255, 0.15);
     --white: #f8fafc;
     --gray: #cbd5e1;
@@ -14,7 +14,7 @@
     --radius-full: 999px;
 
     --shadow-gold:
-        0 0 20px rgba(212, 175, 55, 0.15);
+        0 0 20px rgba(212, 175, 55, 0.35);
 
     --transition: all .3s ease;
 
@@ -23,15 +23,11 @@
     --color-danger: #ef4444;
     --color-warning: #f59e0b;
 
-    --background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
+    --background: rgba(255, 255, 255, 0.1);
+    --backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-
-
     --border: 1px solid rgba(212, 175, 55, 0.18);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25),
-        0 0 30px rgba(212, 175, 55, 0.08);
+    --box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25),
+        0 0 30px rgba(212, 175, 55, 0.48);
 
 }

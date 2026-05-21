@@ -34,14 +34,10 @@
 
   border-radius: 3.2rem;
 
-  background:
-    var(--light-transparent);
+  background: var(--background);
 
-  border:
-    1px solid var(--border);
-
-  backdrop-filter: blur(14px);
-
+  border:var(--border);
+  backdrop-filter: var(--backdrop-filter);
   overflow: hidden;
 
   transition: var(--transition);
@@ -67,27 +63,11 @@
   margin-bottom: 2rem;
   background: var(--gold-transparent);
 
-  border:
-    1px solid rgba(212, 175, 55, .15);
+  border: var(--border);
 
   color: var(--gold);
 
   font-size: 3rem;
-}
-
-.title {
-  font-size: 2.6rem;
-  color: white;
-
-  margin-bottom: 2rem;
-}
-
-.description {
-  color: var(--text);
-
-  line-height: 1.8;
-
-  font-size: 1.6rem;
 }
 
 .number {

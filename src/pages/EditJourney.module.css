@@ -52,7 +52,7 @@
   padding: 2rem;
 
   border-radius: var(--radius);
-  background: var(--light-transparent);
+  background: var(--background);
 
   position: sticky;
   top: 10rem;
@@ -101,7 +101,7 @@
   padding: 1.4rem;
   border-radius: 1.8rem;
 
-  background: var(--light-transparent);
+  background: var(--background);
 }
 
 .trailBody {
@@ -155,7 +155,7 @@
 
   padding: 1.5rem;
 
-  background: var(--light-transparent);
+  background: var(--background);
   backdrop-filter: blur(8px);
 
   border-radius: var(--radius);
@@ -207,6 +207,8 @@
   padding: 2rem;
   margin-bottom: 2rem;
   width: 100%;
+  border-radius: var(--radius);
+  background: var(--background);
 }
 
 .shareTitle {

@@ -10,7 +10,7 @@
   padding: 2rem;
 
   background: var(--gray-transparent);
-  backdrop-filter: blur(7px);
+  backdrop-filter: var(--backdrop-filter);
 }
 
 .modal {
