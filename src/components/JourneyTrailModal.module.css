@@ -167,7 +167,18 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   flex-direction: column;
   gap: 1rem;
 }
-
+.attachmentsHeader{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: start;
+}
+.attachmentsInputs{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .attachmentsList {
   display: flex;
   flex-direction: column;
@@ -189,6 +200,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   gap: 1rem;
 
   color: white;
+}
+
+.fileInput{
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {

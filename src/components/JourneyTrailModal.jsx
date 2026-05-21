@@ -547,16 +547,18 @@ export default function JourneyTrailModal({
           </div>
 
           <div className={styles.attachmentsSection}>
-            <div className={styles.linksHeader}>
-              <div>
+            <div className={styles.attachmentsHeader}>
+
                 <Subtitle size="bg" variant="light" weight="bold">
                   Anexos
                 </Subtitle>
 
-                <Subtitle size="sm" variant="light">
+                <Subtitle size="sm" variant="warning">
                   Máximo de 3 arquivos
                 </Subtitle>
-              </div>
+             
+            </div>
+            <div className={styles.attachmentsInputs}>
               <Input
                 label="Nome do anexo"
                 placeholder="Ex: Material complementar"
@@ -565,17 +567,22 @@ export default function JourneyTrailModal({
                   setAttachmentName(event.target.value)
                 }
               />
+              
               <input
                 type="file"
                 multiple
                 onChange={handleFileUpload}
                 disabled={form.attachments.length >= 3 || loading}
                 className={styles.fileInput}
-              />
+              /><Subtitle variant="warning" size="sm">
+O carregamento do anexo pode levar alguns instantes, dependendo do tamanho do arquivo.              </Subtitle>
             </div>
 
             {form.attachments.length > 0 && (
               <div className={styles.attachmentsList}>
+                <Subtitle size="bg" variant="light" weight="bold">
+                  Lista de anexos
+                </Subtitle>
                 {form.attachments.map((file, index) => (
                   <div key={index} className={styles.attachmentItem}>
                     <span>{file.name}</span>

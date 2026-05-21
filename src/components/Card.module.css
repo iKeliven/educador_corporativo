@@ -1,11 +1,9 @@
 .card {
     padding: 2rem;
     border-radius: var(--radius);
-    background: var(--light-transparent);
-    box-shadow: var(--shadow-gold);
+    background: var(--background);
     transition: var(--transition);
     position: relative;
-
 }
 
 .card:hover {
