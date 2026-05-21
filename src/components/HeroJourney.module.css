@@ -71,6 +71,7 @@
     width: 100%;
     max-width: 550px;
     flex-wrap: wrap;
+    text-transform: uppercase;
 }
 
 @media (max-width: 1200px) {

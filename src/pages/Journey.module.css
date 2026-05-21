@@ -102,12 +102,12 @@
 .card {
   width: 100%;
   padding: 2rem; 
-   border-radius: var(--radius);
+  border-radius: var(--radius);
   background: var(--light-transparent);
   backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: 1rem;
   transition: var(--transition);
 }
 
