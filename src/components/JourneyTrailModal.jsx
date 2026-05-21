@@ -551,7 +551,7 @@ export default function JourneyTrailModal({
                   />
                   <Button
                     type="button"
-                    size="sm"
+                    size="xsm"
                     variant="ghost"
                     onClick={() =>
                       removeLink(index)

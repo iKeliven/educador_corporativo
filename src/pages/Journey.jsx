@@ -18,6 +18,7 @@ import {
   LuGraduationCap,
   LuBookOpen,
   LuClock3,
+  LuPapperclip,
 } from "react-icons/lu";
 
 export default function Journey() {
@@ -208,6 +209,22 @@ export default function Journey() {
                   {trail.description}
                 </Subtitle>
               </div>
+              {trail.attachments?.length > 0 && (
+                <div className={styles.attachments}>
+                  {trail.attachments.map((file, fileIndex) => (
+                    <a
+                      key={fileIndex}
+                      href={file.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={styles.attachmentLink}
+                    >
+                      <LuPaperclip />
+                      {file.name}
+                    </a>
+                  ))}
+                </div>
+              )}
 
               {trail.links?.length > 0 && (
                 <div className={styles.buttonGroup}>
@@ -220,7 +237,7 @@ export default function Journey() {
                     >
                       <Button
                         type="button"
-                        size="sm"
+                        size="xsm"
                         variant={link.variant || "secondary"}
                       >
                         {link.title || "Acessar conteúdo"}
