@@ -66,7 +66,7 @@ export default function Header({
 
       <div className={styles.actions}>
         {isAuthenticated ? (
-          <>
+          <div className={styles.links}>
           <Link
               to="/dashboard"
               className={styles.navLink}
@@ -92,7 +92,7 @@ export default function Header({
             >
               Sair
             </Button>
-          </>
+          </div>
         ) : (
           <div className={styles.nav}>
             <Link

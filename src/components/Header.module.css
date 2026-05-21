@@ -56,6 +56,12 @@
     gap: 40px;
 }
 
+.links{
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
 @media (max-width: 608px) {
     .header {
         padding: 20px;
