@@ -14,10 +14,12 @@
 
 .primary {
     background: var(--gold);
-    color: black;
-    box-shadow: var(--shadow-gold);
+    color: var(--night);
 }
-
+.dark{
+    background-color: var(--night);
+    color: var(--gold);
+}
 .secondary {
     background: transparent;
     border: 1px solid var(--gold);
@@ -26,8 +28,8 @@
 
 .ghost {
     background: transparent;
-    border: 1px solid white;
-    color: white;
+    border: 1px solid var(--white);
+    color: var(--white);
 }
 .error {
     background: transparent;
@@ -56,4 +58,9 @@
 
 .lg {
     padding: 14px 24px;
+}
+
+.xsm{
+    padding: 3px 6px;
+    font-size: 0.8rem
 }

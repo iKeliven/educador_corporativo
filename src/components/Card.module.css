@@ -42,9 +42,8 @@
 .actions {
     padding-top: 1.5rem;
     border-top: 1px solid var(--white);
-
+    align-items: end;
     display: flex;
-    flex-wrap: wrap;
     gap: 1rem;
 }
 
@@ -94,7 +93,7 @@
 
     border-radius: 1.4rem;
 
-    background:  rgba(238, 66, 66, 0.35);
+    background: rgba(238, 66, 66, 0.35);
     border: 2px solid var(--color-danger);
 
     box-shadow:
@@ -135,5 +134,41 @@
     to {
         opacity: 1;
         transform: translateY(0) scale(1);
+    }
+}
+
+
+@media (max-width: 601px) {
+    .card {
+        padding: 1.5rem;
+        width: 89vw;
+    }
+
+    .header {
+        align-items: flex-start;
+    }
+
+    .headerInfo {
+        width: 50%;
+    }
+
+    .headerBadge {
+        margin-top: -50px;
+        transform: scale(0.8);
+    }
+
+    .actions {
+        justify-content: end;
+        align-items: end;
+    }
+    .linkBox{
+        flex-direction: column;
+        width: 100%;
+        align-items: self-start;
+        gap: 1rem
+    }
+    .linkBox button{
+        transform: scale(0.8);
+        margin-left: -10px;
     }
 }

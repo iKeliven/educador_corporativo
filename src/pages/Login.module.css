@@ -83,7 +83,7 @@
   background: transparent;
   border: none;
 
-  color: white;
+  color: var(--navy);
 
   cursor: pointer;
 

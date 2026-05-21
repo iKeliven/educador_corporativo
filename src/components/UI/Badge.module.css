@@ -13,9 +13,9 @@
     color: var(--gold);
     padding: 10px 16px;
     border-radius: var(--radius-full);
+    
     background: var(--gold-transparent);
 }
-
 
 .ghost {
     color: white;

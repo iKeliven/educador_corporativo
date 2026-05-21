@@ -7,11 +7,15 @@ export default function Select({
   onChange,
   options = [],
 }) {
+
   return (
     <div className={styles.group}>
-      <label className={styles.label}>
-        {label}
-      </label>
+
+      {label && (
+        <label className={styles.label}>
+          {label}
+        </label>
+      )}
 
       <select
         className={styles.select}
@@ -19,19 +23,35 @@ export default function Select({
         value={value}
         onChange={onChange}
       >
-        <option value="" className={styles.option}>
+
+        <option value="">
           Selecione
         </option>
 
-        {options.map((option) => (
-          <option
-            key={option}
-            value={option}
-          >
-            {option}
-          </option>
-        ))}
+        {options.map((option) => {
+
+          const optionValue =
+            typeof option === "string"
+              ? option
+              : option.value;
+
+          const optionLabel =
+            typeof option === "string"
+              ? option
+              : option.label;
+
+          return (
+            <option
+              key={optionValue}
+              value={optionValue}
+            >
+              {optionLabel}
+            </option>
+          );
+        })}
+
       </select>
+
     </div>
   );
 }

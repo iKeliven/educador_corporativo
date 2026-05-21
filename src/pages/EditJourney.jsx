@@ -491,29 +491,56 @@ export default function EditJourney() {
                                             <div className={styles.trailNumber}>
                                                 {index + 1}
                                             </div>
+                                            <div>
 
-                                            <div className={styles.trailBody}>
+                                                <div className={styles.trailBody}>
+                                                    <div>
+                                                        <Title size="sm">{trail.title}</Title>
+                                                        {(trail.date || trail.hour) && (
+                                                            <div className={styles.trailMeta}>
+                                                                {trail.date && <span>{trail.date}</span>}
+                                                                {trail.date && trail.hour && <span>às</span>}
+                                                                {trail.hour && <span>{trail.hour}</span>}
+                                                            </div>
+                                                        )}
+                                                        <Subtitle size="md" variant="light">
+                                                            {trail.description}
+                                                        </Subtitle>
+                                                    </div>
+
+                                                    <Badge>
+                                                        {formatDuration(trail.duration_minutes)}
+                                                    </Badge>
+
+                                                </div>
                                                 <div>
-                                                    <Title size="sm">{trail.title}</Title>
 
-                                                    <Subtitle size="sm" variant="light">
-                                                        {trail.description}
-                                                    </Subtitle>
+
+                                                    {trail.links?.length > 0 && (
+                                                        <div className={styles.trailLinks}>
+                                                            {trail.links.map((link, linkIndex) => (
+                                                                <a
+                                                                    key={linkIndex}
+                                                                    href={link.url}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                >
+                                                                    <Button
+                                                                        type="button"
+                                                                        size="sm"
+                                                                        variant={link.variant || "primary"}
+                                                                    >
+                                                                        {link.title || "Acessar conteúdo"}
+                                                                    </Button>
+                                                                </a>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
 
-                                                <Badge>
-                                                    {formatDuration(trail.duration_minutes)}
-                                                </Badge>
                                             </div>
 
                                             <div className={styles.footer}>
-                                                {(trail.date || trail.hour) && (
-                                                    <div className={styles.trailMeta}>
-                                                        {trail.date && <span>{trail.date}</span>}
-                                                        {trail.date && trail.hour && <span>às</span>}
-                                                        {trail.hour && <span>{trail.hour}</span>}
-                                                    </div>
-                                                )}
 
                                                 <div className={styles.trailActions}>
                                                     <Button

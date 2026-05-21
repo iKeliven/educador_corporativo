@@ -146,12 +146,12 @@ export default function Journey() {
         </div>
 
         {trails.map((trail, index) => (
-          <div
+          <motion.div
             key={trail.id}
             className={`
-              ${styles.item}
-              ${index % 2 === 0 ? styles.left : styles.right}
-            `}
+      ${styles.item}
+      ${index % 2 === 0 ? styles.left : styles.right}
+    `}
             initial={{
               opacity: 0,
               x: index % 2 === 0 ? -50 : 50,
@@ -182,7 +182,17 @@ export default function Journey() {
               transition={{ duration: 0.25 }}
             >
               <div className={styles.header}>
-                <Badge>Trilha {index + 1}</Badge>
+                <div>
+                  <Badge>Encontro {index + 1}</Badge>
+
+                  {(trail.date || trail.hour) && (
+                    <p className={styles.dateInfo}>
+                      {trail.date}
+                      {trail.date && trail.hour && " às "}
+                      {trail.hour}
+                    </p>
+                  )}
+                </div>
 
                 <Badge variant="ghost">
                   {formatDuration(trail.duration_minutes)}
@@ -190,34 +200,37 @@ export default function Journey() {
               </div>
 
               <div className={styles.content}>
-                <Title size="md">{trail.title}</Title>
+                <Title size="md">
+                  {trail.title}
+                </Title>
 
                 <Subtitle size="sm" variant="light">
                   {trail.description}
                 </Subtitle>
               </div>
 
-              <div className={styles.info}>
-                {trail.date && (
-                  <Subtitle size="sm" variant="gold">
-                    {trail.date} às {trail.hour}
-                  </Subtitle>
-                )}
-
-                {trail.link && (
-                  <a
-                    href={trail.link}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Button type="button" size="sm">
-                      Acessar Conteúdo
-                    </Button>
-                  </a>
-                )}
-              </div>
+              {trail.links?.length > 0 && (
+                <div className={styles.buttonGroup}>
+                  {trail.links.map((link, linkIndex) => (
+                    <a
+                      key={linkIndex}
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant={link.variant || "secondary"}
+                      >
+                        {link.title || "Acessar conteúdo"}
+                      </Button>
+                    </a>
+                  ))}
+                </div>
+              )}
             </motion.article>
-          </div>
+          </motion.div>
         ))}
       </section>
     </MainLayout>

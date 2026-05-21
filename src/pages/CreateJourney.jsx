@@ -73,6 +73,16 @@ export default function CreateJourney() {
       return;
     }
 
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setErrorMessage("Usuário não autenticado.");
+      return;
+    }
+
     const finalType =
       form.type === "Outro"
         ? form.customType.trim()
@@ -80,13 +90,19 @@ export default function CreateJourney() {
 
     const payload = {
       company: form.company.trim(),
+
       slug: form.slug
         .trim()
         .toLowerCase()
         .replaceAll(" ", "-"),
+
       title: form.title.trim(),
+
       description: form.description.trim(),
+
       type: finalType,
+
+      user_id: user.id,
     };
 
     const { data, error } = await supabase
