@@ -59,7 +59,7 @@
 .links{
     display: flex;
     gap: 40px;
-    align-items: center;
+    align-items: flex-end;
 }
 
 @media (max-width: 608px) {
