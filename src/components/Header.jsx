@@ -67,6 +67,12 @@ export default function Header({
       <div className={styles.actions}>
         {isAuthenticated ? (
           <>
+          <Link
+              to="/dashboard"
+              className={styles.navLink}
+            >
+              Início
+            </Link>
             <div className={styles.user}>
               <div className={styles.avatar}>
                 {userName.charAt(0).toUpperCase()}
