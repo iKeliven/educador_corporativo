@@ -34,9 +34,7 @@ export default function JourneyTrailModal({
   });
 
   const [loading, setLoading] = useState(false);
-
-  const [errorMessage, setErrorMessage] =
-    useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     setErrorMessage("");
@@ -44,25 +42,16 @@ export default function JourneyTrailModal({
     if (trail) {
       setForm({
         title: trail.title || "",
-        description:
-          trail.description || "",
-        attachments:
-          trail.attachments || [],
-
-        duration_minutes:
-          trail.duration_minutes || "",
-
-        order_number:
-          trail.order_number || "",
-
+        description: trail.description || "",
+        duration_minutes: trail.duration_minutes || "",
+        order_number: trail.order_number || "",
         date: trail.date || "",
-
         hour: trail.hour || "",
-
         links:
           trail.links?.length > 0
             ? trail.links
             : [emptyLink],
+        attachments: trail.attachments || [],
       });
     } else {
       setForm({
@@ -81,8 +70,7 @@ export default function JourneyTrailModal({
   if (!isOpen) return null;
 
   function handleChange(event) {
-    const { name, value } =
-      event.target;
+    const { name, value } = event.target;
 
     setForm((current) => ({
       ...current,
@@ -90,33 +78,35 @@ export default function JourneyTrailModal({
     }));
   }
 
-  function handleLinkChange(
-    index,
-    field,
-    value
-  ) {
+  function handleLinkChange(index, field, value) {
     setForm((current) => ({
       ...current,
-
-      links: current.links.map(
-        (link, i) =>
-          i === index
-            ? {
+      links: current.links.map((link, i) =>
+        i === index
+          ? {
               ...link,
               [field]: value,
             }
-            : link
+          : link
       ),
     }));
   }
 
   function addNewLink() {
+    if (form.links.length >= 6) {
+      setErrorMessage("Você pode adicionar no máximo 6 botões.");
+      return;
+    }
+
+    setErrorMessage("");
+
     setForm((current) => ({
       ...current,
-
       links: [
         ...current.links,
-        emptyLink,
+        {
+          ...emptyLink,
+        },
       ],
     }));
   }
@@ -124,76 +114,71 @@ export default function JourneyTrailModal({
   function removeLink(index) {
     setForm((current) => ({
       ...current,
-
       links:
         current.links.length === 1
-          ? [emptyLink]
-          : current.links.filter(
-            (_, i) => i !== index
-          ),
+          ? [
+              {
+                ...emptyLink,
+              },
+            ]
+          : current.links.filter((_, i) => i !== index),
     }));
   }
 
   async function handleFileUpload(event) {
+    const files = Array.from(event.target.files || []);
 
-    const files =
-      Array.from(event.target.files);
+    if (files.length === 0) return;
 
-    if (
-      form.attachments.length +
-      files.length > 3
-    ) {
-
-      setErrorMessage(
-        "Você pode anexar no máximo 3 arquivos."
-      );
-
+    if (form.attachments.length + files.length > 3) {
+      setErrorMessage("Você pode anexar no máximo 3 arquivos.");
+      event.target.value = "";
       return;
     }
 
     setLoading(true);
+    setErrorMessage("");
 
     const uploadedFiles = [];
 
     for (const file of files) {
+      const safeFileName = file.name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9._-]/g, "-");
 
-      const filePath =
-        `${journeyId}/${Date.now()}-${file.name}`;
+      const filePath = `${journeyId}/${Date.now()}-${safeFileName}`;
 
-      const { error } =
-        await supabase.storage
-
-          .from("trail-files")
-
-          .upload(filePath, file);
+      const { error } = await supabase.storage
+        .from("trail-files")
+        .upload(filePath, file);
 
       if (error) {
+        console.log(error);
 
         setErrorMessage(
-          "Erro ao enviar arquivo."
+          `Erro ao enviar arquivo: ${error.message}`
         );
 
         setLoading(false);
+        event.target.value = "";
 
         return;
       }
 
-      const { data } =
-        supabase.storage
-
-          .from("trail-files")
-
-          .getPublicUrl(filePath);
+      const { data } = supabase.storage
+        .from("trail-files")
+        .getPublicUrl(filePath);
 
       uploadedFiles.push({
         name: file.name,
         url: data.publicUrl,
+        path: filePath,
       });
     }
 
     setForm((current) => ({
       ...current,
-
       attachments: [
         ...current.attachments,
         ...uploadedFiles,
@@ -201,7 +186,16 @@ export default function JourneyTrailModal({
     }));
 
     setLoading(false);
+    event.target.value = "";
   }
+
+  function removeAttachment(index) {
+    setForm((current) => ({
+      ...current,
+      attachments: current.attachments.filter((_, i) => i !== index),
+    }));
+  }
+
   function validateForm() {
     if (!form.title.trim()) {
       return "Informe o título da trilha.";
@@ -215,9 +209,7 @@ export default function JourneyTrailModal({
       return "Informe a duração da trilha.";
     }
 
-    if (
-      Number(form.duration_minutes) <= 0
-    ) {
+    if (Number(form.duration_minutes) <= 0) {
       return "A duração deve ser maior que zero.";
     }
 
@@ -225,9 +217,7 @@ export default function JourneyTrailModal({
       return "Informe a ordem da trilha.";
     }
 
-    if (
-      Number(form.order_number) <= 0
-    ) {
+    if (Number(form.order_number) <= 0) {
       return "A ordem deve ser maior que zero.";
     }
 
@@ -239,23 +229,17 @@ export default function JourneyTrailModal({
       return "Informe o horário.";
     }
 
-    const invalidLink =
-      form.links.find(
-        (link) =>
-          (link.title.trim() &&
-            !link.url.trim()) ||
-          (!link.title.trim() &&
-            link.url.trim())
-      );
+    const invalidLink = form.links.find(
+      (link) =>
+        (link.title.trim() && !link.url.trim()) ||
+        (!link.title.trim() && link.url.trim())
+    );
 
     if (invalidLink) {
       return "Preencha o título e a URL do link.";
     }
 
-    if (
-      mode === "create" &&
-      !journeyId
-    ) {
+    if (mode === "create" && !journeyId) {
       return "Jornada não encontrada.";
     }
 
@@ -265,91 +249,55 @@ export default function JourneyTrailModal({
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const validationError =
-      validateForm();
+    const validationError = validateForm();
 
     if (validationError) {
-      setErrorMessage(
-        validationError
-      );
-
+      setErrorMessage(validationError);
       return;
     }
 
     setLoading(true);
-
     setErrorMessage("");
-
-    const orderNumber =
-      Number(form.order_number);
 
     const payload = {
       title: form.title.trim(),
-
-      description:
-        form.description.trim(),
-
-      duration_minutes:
-        Number(form.duration_minutes),
-
-      order_number: orderNumber,
-
+      description: form.description.trim(),
+      duration_minutes: Number(form.duration_minutes),
+      order_number: Number(form.order_number),
       date: form.date,
-
       hour: form.hour,
-
       links: form.links.filter(
-        (link) =>
-          link.title.trim() &&
-          link.url.trim()
+        (link) => link.title.trim() && link.url.trim()
       ),
-
       attachments: form.attachments,
     };
 
     let response;
 
-    if (
-      mode === "edit" &&
-      trail?.id
-    ) {
-      response =
-        await supabase
-
-          .from("trails")
-
-          .update(payload)
-
-          .eq("id", trail.id)
-
-          .select()
-
-          .single();
+    if (mode === "edit" && trail?.id) {
+      response = await supabase
+        .from("trails")
+        .update(payload)
+        .eq("id", trail.id)
+        .select()
+        .single();
     } else {
-      response =
-        await supabase
-
-          .from("trails")
-
-          .insert([
-            {
-              ...payload,
-              journey_id: journeyId,
-            },
-          ])
-
-          .select()
-
-          .single();
+      response = await supabase
+        .from("trails")
+        .insert([
+          {
+            ...payload,
+            journey_id: journeyId,
+          },
+        ])
+        .select()
+        .single();
     }
 
     setLoading(false);
 
     if (response.error) {
-      setErrorMessage(
-        response.error.message
-      );
-
+      setErrorMessage(response.error.message);
       return;
     }
 
@@ -362,31 +310,20 @@ export default function JourneyTrailModal({
         <header className={styles.header}>
           <div>
             <span className={styles.badge}>
-              {mode === "edit"
-                ? "Editar trilha"
-                : "Nova trilha"}
+              {mode === "edit" ? "Editar trilha" : "Nova trilha"}
             </span>
 
             <h2>
-              {mode === "edit"
-                ? "Atualizar trilha"
-                : "Cadastrar trilha"}
+              {mode === "edit" ? "Atualizar trilha" : "Cadastrar trilha"}
             </h2>
           </div>
 
-          <button
-            type="button"
-            className={styles.close}
-            onClick={onClose}
-          >
+          <button type="button" className={styles.close} onClick={onClose}>
             ×
           </button>
         </header>
 
-        <form
-          className={styles.form}
-          onSubmit={handleSubmit}
-        >
+        <form className={styles.form} onSubmit={handleSubmit}>
           <Input
             label="Título"
             name="title"
@@ -410,9 +347,7 @@ export default function JourneyTrailModal({
               name="duration_minutes"
               type="number"
               placeholder="Ex: 45"
-              value={
-                form.duration_minutes
-              }
+              value={form.duration_minutes}
               onChange={handleChange}
             />
 
@@ -445,17 +380,17 @@ export default function JourneyTrailModal({
           </div>
 
           <div className={styles.linksSection}>
-            <div
-              className={
-                styles.linksHeader
-              }
-            >
-              <Subtitle size="bg" variant="light" weight="bold">
-                Botões da trilha
-              </Subtitle>
-              <Subtitle size="sm" variant="light" >
-                Adicione links e materiais para a sua trilha
-              </Subtitle>
+            <div className={styles.linksHeader}>
+              <div>
+                <Subtitle size="bg" variant="light" weight="bold">
+                  Botões da trilha
+                </Subtitle>
+
+                <Subtitle size="sm" variant="light">
+                  Adicione links e materiais para a sua trilha
+                </Subtitle>
+              </div>
+
               <Button
                 type="button"
                 size="sm"
@@ -469,213 +404,131 @@ export default function JourneyTrailModal({
               </Button>
             </div>
 
-            {form.links.map(
-              (link, index) => (
-                <div
-                  key={index}
-                  className={
-                    styles.linkCard
+            {form.links.map((link, index) => (
+              <div key={index} className={styles.linkCard}>
+                <Input
+                  label="Título do botão"
+                  placeholder="Ex: Acessar aula"
+                  value={link.title}
+                  onChange={(event) =>
+                    handleLinkChange(index, "title", event.target.value)
                   }
+                />
+
+                <Input
+                  label="URL"
+                  placeholder="https://..."
+                  value={link.url}
+                  onChange={(event) =>
+                    handleLinkChange(index, "url", event.target.value)
+                  }
+                />
+
+                <Select
+                  label="Estilo do botão"
+                  name="variant"
+                  value={link.variant}
+                  onChange={(event) =>
+                    handleLinkChange(index, "variant", event.target.value)
+                  }
+                  options={[
+                    {
+                      value: "primary",
+                      label: "Dourado",
+                    },
+                    {
+                      value: "dark",
+                      label: "Azul",
+                    },
+                    {
+                      value: "secondary",
+                      label: "Transparente",
+                    },
+                    {
+                      value: "ghost",
+                      label: "Branco",
+                    },
+                    {
+                      value: "success",
+                      label: "Verde",
+                    },
+                    {
+                      value: "error",
+                      label: "Vermelho",
+                    },
+                  ]}
+                />
+
+                <Button
+                  type="button"
+                  size="xsm"
+                  variant="ghost"
+                  onClick={() => removeLink(index)}
                 >
-                  <Input
-                    label="Título do botão"
-                    placeholder="Ex: Acessar aula"
-                    value={link.title}
-                    onChange={(
-                      event
-                    ) =>
-                      handleLinkChange(
-                        index,
-                        "title",
-                        event.target.value
-                      )
-                    }
-                  />
+                  Remover
+                </Button>
+              </div>
+            ))}
+          </div>
 
-                  <Input
-                    label="URL"
-                    placeholder="https://..."
-                    value={link.url}
-                    onChange={(
-                      event
-                    ) =>
-                      handleLinkChange(
-                        index,
-                        "url",
-                        event.target.value
-                      )
-                    }
-                  />
+          <div className={styles.attachmentsSection}>
+            <div className={styles.linksHeader}>
+              <div>
+                <Subtitle size="bg" variant="light" weight="bold">
+                  Anexos
+                </Subtitle>
 
-                  <Select
-                    label="Estilo do botão"
-                    name="variant"
-                    value={link.variant}
-                    onChange={(event) =>
-                      handleLinkChange(
-                        index,
-                        "variant",
-                        event.target.value
-                      )
-                    }
-                    options={[
-                      {
-                        value: "primary",
-                        label: "Dourado",
-                      },
-                      {
-                        value: "dark",
-                        label: "Azul",
-                      },
+                <Subtitle size="sm" variant="light">
+                  Máximo de 3 arquivos
+                </Subtitle>
+              </div>
 
-                      {
-                        value: "secondary",
-                        label: "Transparente",
-                      },
+              <input
+                type="file"
+                multiple
+                onChange={handleFileUpload}
+                disabled={form.attachments.length >= 3 || loading}
+                className={styles.fileInput}
+              />
+            </div>
 
-                      {
-                        value: "ghost",
-                        label: "Branco",
-                      },
+            {form.attachments.length > 0 && (
+              <div className={styles.attachmentsList}>
+                {form.attachments.map((file, index) => (
+                  <div key={index} className={styles.attachmentItem}>
+                    <span>{file.name}</span>
 
-                      {
-                        value: "success",
-                        label: "Verde",
-                      },
-
-                      {
-                        value: "error",
-                        label: "Vermelho",
-                      },
-                    ]}
-                  />
-                  <Button
-                    type="button"
-                    size="xsm"
-                    variant="ghost"
-                    onClick={() =>
-                      removeLink(index)
-                    }
-                  >
-                    Remover
-                  </Button>
-                </div>
-              )
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => removeAttachment(index)}
+                    >
+                      Remover
+                    </Button>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 
           {errorMessage && (
-            <Subtitle
-              size="sm"
-              variant="error"
-            >
+            <Subtitle size="sm" variant="error">
               {errorMessage}
             </Subtitle>
           )}
-          <div className={styles.attachmentsSection}>
 
-            <div className={styles.linksHeader}>
-
-              <div>
-
-                <Subtitle
-                  size="bg"
-                  variant="light"
-                  weight="bold"
-                >
-                  Anexos
-                </Subtitle>
-
-                <Subtitle
-                  size="sm"
-                  variant="light"
-                >
-                  Máximo de 3 arquivos
-                </Subtitle>
-
-              </div>
-
-              <Input
-                type="file"
-                multiple
-                onChange={handleFileUpload}
-                disabled={
-                  form.attachments.length >= 3
-                }
-              />
-
-            </div>
-
-            {
-              form.attachments.length > 0 && (
-                <div className={styles.attachmentsList}>
-
-                  {
-                    form.attachments.map(
-                      (file, index) => (
-                        <div
-                          key={index}
-                          className={styles.attachmentItem}
-                        >
-
-                          <span>
-                            {file.name}
-                          </span>
-
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => {
-
-                              setForm((current) => ({
-                                ...current,
-
-                                attachments:
-                                  current.attachments.filter(
-                                    (_, i) =>
-                                      i !== index
-                                  ),
-                              }));
-
-                            }}
-                          >
-                            Remover
-                          </Button>
-
-                        </div>
-                      )
-                    )
-                  }
-
-                </div>
-              )
-            }
-
-          </div>
-
-          <footer
-            className={styles.actions}
-          >
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-            >
+          <footer className={styles.actions}>
+            <Button type="button" variant="ghost" size="sm" onClick={onClose}>
               Cancelar
             </Button>
 
-            <Button
-              type="submit"
-              size="sm"
-              disabled={loading}
-            >
+            <Button type="submit" size="sm" disabled={loading}>
               {loading
                 ? "Salvando..."
                 : mode === "edit"
-                  ? "Salvar alterações"
-                  : "Adicionar trilha"}
+                ? "Salvar alterações"
+                : "Adicionar trilha"}
             </Button>
           </footer>
         </form>

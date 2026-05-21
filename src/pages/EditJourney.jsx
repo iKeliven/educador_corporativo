@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { LuCopy, LuCheck } from "react-icons/lu";
+import {
+  LuCopy,
+  LuCheck,
+  LuPaperclip,
+} from "react-icons/lu";
+
 import styles from "./EditJourney.module.css";
 
 import MainLayout from "../layouts/MainLayout";
@@ -20,618 +25,625 @@ import JourneyTrailModal from "../components/JourneyTrailModal";
 import { supabase } from "../services/supabase";
 
 export default function EditJourney() {
-    const { id } = useParams();
+  const { id } = useParams();
 
-    const [journey, setJourney] = useState(null);
-    const [trails, setTrails] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedTrail, setSelectedTrail] = useState(null);
-    const [copied, setCopied] = useState(false);
-    const [confirmDeleteTrail, setConfirmDeleteTrail] = useState(null);
+  const [journey, setJourney] = useState(null);
+  const [trails, setTrails] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTrail, setSelectedTrail] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [confirmDeleteTrail, setConfirmDeleteTrail] = useState(null);
 
-    const typeOptions = [
-        "Workshop",
-        "Treinamento",
-        "Certificação",
-        "Mentoria",
-        "Onboarding",
-        "Capacitação",
-        "Imersão",
-        "Bootcamp",
-        "Outro",
-    ];
+  const typeOptions = [
+    "Workshop",
+    "Treinamento",
+    "Certificação",
+    "Mentoria",
+    "Onboarding",
+    "Capacitação",
+    "Imersão",
+    "Bootcamp",
+    "Outro",
+  ];
 
-    useEffect(() => {
-        async function loadJourney() {
-            const { data, error } = await supabase
-                .from("journeys")
-                .select(`
+  useEffect(() => {
+    async function loadJourney() {
+      const { data, error } = await supabase
+        .from("journeys")
+        .select(`
           *,
           trails (*)
         `)
-                .eq("id", id)
-                .order("order_number", {
-                    foreignTable: "trails",
-                    ascending: true,
-                })
-                .single();
+        .eq("id", id)
+        .order("order_number", {
+          foreignTable: "trails",
+          ascending: true,
+        })
+        .single();
 
-            if (error) {
-                console.log(error.message);
-                return;
-            }
+      if (error) {
+        console.log(error.message);
+        return;
+      }
 
-            setJourney({
-                ...data,
-                count: data.trails?.length || 0,
-                customType: "",
-            });
+      setJourney({
+        ...data,
+        count: data.trails?.length || 0,
+        customType: "",
+      });
 
-            setTrails(data.trails || []);
-        }
-
-        loadJourney();
-    }, [id]);
-
-    function formatDuration(minutes = 0) {
-        const total = Number(minutes) || 0;
-        const hours = Math.floor(total / 60);
-        const remaining = total % 60;
-
-        if (hours && remaining) return `${hours}h ${remaining}min`;
-        if (hours) return `${hours}h`;
-
-        return `${remaining}min`;
+      setTrails(data.trails || []);
     }
 
-    function calculateWorkload() {
-        const totalMinutes = trails.reduce(
-            (acc, trail) => acc + (Number(trail.duration_minutes) || 0),
-            0
-        );
+    loadJourney();
+  }, [id]);
 
-        return formatDuration(totalMinutes);
-    }
+  function formatDuration(minutes = 0) {
+    const total = Number(minutes) || 0;
+    const hours = Math.floor(total / 60);
+    const remaining = total % 60;
 
-    function handleJourneyChange(event) {
-        const { name, value } = event.target;
+    if (hours && remaining) return `${hours}h ${remaining}min`;
+    if (hours) return `${hours}h`;
 
-        setJourney((current) => ({
-            ...current,
-            [name]: value,
-        }));
-    }
+    return `${remaining}min`;
+  }
 
-    async function handleUpdateJourney(event) {
-        event.preventDefault();
+  function calculateWorkload() {
+    const totalMinutes = trails.reduce(
+      (acc, trail) => acc + (Number(trail.duration_minutes) || 0),
+      0
+    );
 
-        const isCustomType =
-            journey.type && !typeOptions.includes(journey.type);
+    return formatDuration(totalMinutes);
+  }
 
-        const finalType =
-            journey.type === "Outro"
-                ? journey.customType
-                : isCustomType
-                    ? journey.customType || journey.type
-                    : journey.type;
+  function handleJourneyChange(event) {
+    const { name, value } = event.target;
 
-        const { error } = await supabase
-            .from("journeys")
-            .update({
-                company: journey.company,
-                title: journey.title,
-                slug: journey.slug,
-                description: journey.description,
-                type: finalType,
-            })
-            .eq("id", id);
+    setJourney((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  }
 
-        if (error) {
-            console.log(error.message);
-            return;
-        }
-
-        alert("Jornada atualizada com sucesso!");
-    }
-
-    function openCreateTrail() {
-        setSelectedTrail({
-            order_number: trails.length + 1,
-        });
-
-        setIsModalOpen(true);
-    }
-
-    function openEditTrail(trail) {
-        setSelectedTrail(trail);
-        setIsModalOpen(true);
-    }
-
-    function closeModal() {
-        setSelectedTrail(null);
-        setIsModalOpen(false);
-    }
-
-    async function deleteTrail(trailId) {
-        const { error } = await supabase
-            .from("trails")
-            .delete()
-            .eq("id", trailId);
-
-        if (error) {
-            console.log(error.message);
-            return;
-        }
-
-        const updatedTrails = trails.filter(
-            (trail) => trail.id !== trailId
-        );
-
-        setJourney((current) => ({
-            ...current,
-            count: Math.max((current.count || 1) - 1, 0),
-        }));
-
-        await normalizeTrailOrder(updatedTrails);
-
-        setConfirmDeleteTrail(null);
-    }
-
-    async function normalizeTrailOrder(updatedTrails) {
-        const orderedTrails = [...updatedTrails]
-            .sort((a, b) => a.order_number - b.order_number)
-            .map((trail, index) => ({
-                ...trail,
-                order_number: index + 1,
-            }));
-
-        setTrails(orderedTrails);
-
-        await Promise.all(
-            orderedTrails.map((trail) =>
-                supabase
-                    .from("trails")
-                    .update({
-                        order_number: trail.order_number,
-                    })
-                    .eq("id", trail.id)
-            )
-        );
-    }
-
-    async function handleTrailSaved(savedTrail) {
-        let updatedTrails;
-
-        if (selectedTrail?.id) {
-            updatedTrails = trails.map((trail) =>
-                trail.id === savedTrail.id ? savedTrail : trail
-            );
-        } else {
-            updatedTrails = [...trails, savedTrail];
-
-            setJourney((current) => ({
-                ...current,
-                count: (current.count || 0) + 1,
-            }));
-        }
-
-        await normalizeTrailOrder(updatedTrails);
-
-        closeModal();
-    }
-
-    async function copyJourneyLink() {
-        const link = `${window.location.origin}/jornada/${journey.slug}`;
-
-        await navigator.clipboard.writeText(link);
-
-        setCopied(true);
-
-        setTimeout(() => {
-            setCopied(false);
-        }, 2000);
-    }
-
-    if (!journey) {
-        return (
-            <MainLayout>
-                <Header isAuthenticated />
-                <Loading />
-            </MainLayout>
-        );
-    }
-
-    const calculatedWorkload = calculateWorkload();
-    const publicJourneyLink = `/jornada/${journey.slug}`;
+  async function handleUpdateJourney(event) {
+    event.preventDefault();
 
     const isCustomType =
-        journey.type && !typeOptions.includes(journey.type);
+      journey.type && !typeOptions.includes(journey.type);
 
-    const selectTypeValue =
-        isCustomType ? "Outro" : journey.type || "";
+    const finalType =
+      journey.type === "Outro"
+        ? journey.customType
+        : isCustomType
+        ? journey.customType || journey.type
+        : journey.type;
 
-    const customTypeValue =
-        journey.customType || (isCustomType ? journey.type : "");
+    const { error } = await supabase
+      .from("journeys")
+      .update({
+        company: journey.company,
+        title: journey.title,
+        slug: journey.slug,
+        description: journey.description,
+        type: finalType,
+      })
+      .eq("id", id);
 
-    return (
-        <MainLayout>
-            <Header isAuthenticated />
+    if (error) {
+      console.log(error.message);
+      return;
+    }
 
-            <motion.section
-                className={styles.page}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-            >
-                <div className={styles.container}>
-                    <motion.div
-                        className={styles.header}
-                        initial={{ opacity: 0, y: -24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4 }}
-                    >
-                        <div>
-                            <Badge>EDITOR DA JORNADA</Badge>
+    alert("Jornada atualizada com sucesso!");
+  }
 
-                            <Title size="bg">Editar jornada</Title>
+  function openCreateTrail() {
+    setSelectedTrail({
+      order_number: trails.length + 1,
+    });
 
-                            <Subtitle variant="light">
-                                Atualize as informações principais e organize as trilhas que
-                                aparecem no infográfico.
-                            </Subtitle>
-                        </div>
+    setIsModalOpen(true);
+  }
 
-                        <Link to={publicJourneyLink} target="_blank">
-                            <Button type="button" size="sm" variant="secondary">
-                                Visualizar jornada
-                            </Button>
-                        </Link>
-                    </motion.div>
+  function openEditTrail(trail) {
+    setSelectedTrail(trail);
+    setIsModalOpen(true);
+  }
 
-                    <div className={styles.contentGrid}>
-                        <div>
-                            <motion.div
-                                className={styles.shareBox}
-                                initial={{ opacity: 0, y: 24 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.1, duration: 0.4 }}
-                            >
-                                <div className={styles.shareActions}>
-                                    <div className={styles.shareTitle}>
-                                        <Title size="md" highlight={journey.title}>
-                                            Jornada:
-                                        </Title>
+  function closeModal() {
+    setSelectedTrail(null);
+    setIsModalOpen(false);
+  }
 
-                                    </div>
+  async function deleteTrail(trailId) {
+    const { error } = await supabase
+      .from("trails")
+      .delete()
+      .eq("id", trailId);
 
-                                    <Link to={publicJourneyLink} target="_blank">
-                                        <Button type="button" size="sm" variant="secondary">
-                                            Visualizar
-                                        </Button>
-                                    </Link>
-                                </div>
-                                <div className={styles.shareActions}>
-                                    <Subtitle size="sm" variant="light">
-                                        Copie e compartilhe este link com os participantes da
-                                        jornada.
-                                    </Subtitle>
-                                    <div className={styles.shareLink}>
-                                        {window.location.origin}/jornada/{journey.slug}
+    if (error) {
+      console.log(error.message);
+      return;
+    }
 
-                                        <button
-                                            type="button"
-                                            onClick={copyJourneyLink}
-                                            className={styles.copyButton}
-                                            title={
-                                                copied
-                                                    ? "Link copiado!"
-                                                    : "Copiar link da jornada"
-                                            }
-                                        >
-
-                                            {
-                                                copied
-                                                    ? <LuCheck />
-                                                    : <LuCopy />
-                                            }
-
-                                        </button>
-                                    </div>
-
-                                    {copied && (
-                                        <Subtitle size="sm" variant="success">
-                                            Link copiado com sucesso!
-                                        </Subtitle>
-                                    )}
-
-                                </div>
-                            </motion.div>
-
-                            <motion.form
-                                className={styles.form}
-                                onSubmit={handleUpdateJourney}
-                                initial={{ opacity: 0, y: 24 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2, duration: 0.4 }}
-                            >
-                                <div className={styles.formHeader}>
-                                    <Title size="md">Informações da jornada</Title>
-
-                                    <Subtitle size="md" variant="light">
-                                        Esses dados aparecem no cabeçalho do infográfico.
-                                    </Subtitle>
-                                </div>
-
-                                <div className={styles.grid}>
-                                    <Input
-                                        label="Empresa"
-                                        name="company"
-                                        value={journey.company || ""}
-                                        onChange={handleJourneyChange}
-                                    />
-
-                                    <Input
-                                        label="Slug"
-                                        name="slug"
-                                        value={journey.slug || ""}
-                                        onChange={handleJourneyChange}
-                                    />
-                                </div>
-
-                                <div className={styles.grid}>
-                                    <Select
-                                        label="Tipo da jornada"
-                                        name="type"
-                                        value={selectTypeValue}
-                                        onChange={(event) => {
-                                            const value = event.target.value;
-
-                                            setJourney((current) => ({
-                                                ...current,
-                                                type: value,
-                                                customType:
-                                                    value === "Outro" ? customTypeValue : "",
-                                            }));
-                                        }}
-                                        options={typeOptions}
-                                    />
-
-                                    <Input
-                                        label="Carga horária total"
-                                        value={calculatedWorkload}
-                                        disabled
-                                    />
-                                </div>
-
-                                {(selectTypeValue === "Outro" || isCustomType) && (
-                                    <Input
-                                        label="Tipo personalizado"
-                                        name="customType"
-                                        placeholder="Ex: Residência"
-                                        value={customTypeValue}
-                                        onChange={(event) =>
-                                            setJourney((current) => ({
-                                                ...current,
-                                                customType: event.target.value,
-                                            }))
-                                        }
-                                    />
-                                )}
-
-                                <Input
-                                    label="Título"
-                                    name="title"
-                                    value={journey.title || ""}
-                                    onChange={handleJourneyChange}
-                                />
-
-                                <Input
-                                    textarea
-                                    label="Descrição"
-                                    name="description"
-                                    value={journey.description || ""}
-                                    onChange={handleJourneyChange}
-                                />
-
-                                <div className={styles.actions}>
-                                    <Button type="button" size="sm" variant="ghost">
-                                        Cancelar
-                                    </Button>
-
-                                    <Button type="submit" size="sm">
-                                        Salvar alterações
-                                    </Button>
-                                </div>
-                            </motion.form>
-                        </div>
-
-                        <motion.aside
-                            className={styles.trailsPanel}
-                            initial={{ opacity: 0, x: 32 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.3, duration: 0.4 }}
-                        >
-                            <div className={styles.trailsHeader}>
-                                <div>
-                                    <Title size="md">Trilhas cadastradas</Title>
-
-                                    <Subtitle size="sm" variant="light">
-                                        {trails.length} trilhas no infográfico
-                                    </Subtitle>
-                                </div>
-
-                                <Button type="button" size="sm" onClick={openCreateTrail}>
-                                    + Add trilha
-                                </Button>
-                            </div>
-
-                            <div className={styles.trailsList}>
-                                {trails.length === 0 && (
-                                    <div className={styles.empty}>
-                                        <Subtitle size="sm" variant="light">
-                                            Nenhuma trilha cadastrada ainda.
-                                        </Subtitle>
-                                    </div>
-                                )}
-
-                                <AnimatePresence>
-                                    {trails.map((trail, index) => (
-                                        <motion.article
-                                            key={trail.id}
-                                            className={styles.trailItem}
-                                            initial={{ opacity: 0, y: 24 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -20 }}
-                                            whileHover={{ y: -4 }}
-                                            transition={{
-                                                duration: 0.25,
-                                                delay: index * 0.04,
-                                            }}
-                                        >
-                                            <div className={styles.trailNumber}>
-                                                {index + 1}
-                                            </div>
-                                            <div>
-
-                                                <div className={styles.trailBody}>
-                                                    <div>
-                                                        <Title size="sm">{trail.title}</Title>
-                                                        {(trail.date || trail.hour) && (
-                                                            <div className={styles.trailMeta}>
-                                                                {trail.date && <span>{trail.date}</span>}
-                                                                {trail.date && trail.hour && <span>às</span>}
-                                                                {trail.hour && <span>{trail.hour}</span>}
-                                                            </div>
-                                                        )}
-                                                        <Subtitle size="md" variant="light">
-                                                            {trail.description}
-                                                        </Subtitle>
-                                                    </div>
-
-                                                    <Badge>
-                                                        {formatDuration(trail.duration_minutes)}
-                                                    </Badge>
-
-                                                </div>
-                                                <div>
-
-
-                                                    {trail.links?.length > 0 && (
-                                                        <div className={styles.trailLinks}>
-                                                            {trail.links.map((link, linkIndex) => (
-                                                                <a
-                                                                    key={linkIndex}
-                                                                    href={link.url}
-                                                                    target="_blank"
-                                                                    rel="noreferrer"
-                                                                >
-                                                                    <Button
-                                                                        type="button"
-                                                                        size="sm"
-                                                                        variant={link.variant || "primary"}
-                                                                    >
-                                                                        {link.title || "Acessar conteúdo"}
-                                                                    </Button>
-                                                                </a>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                            </div>
-
-                                            <div className={styles.footer}>
-
-                                                <div className={styles.trailActions}>
-                                                    <Button
-                                                        type="button"
-                                                        size="sm"
-                                                        variant="secondary"
-                                                        onClick={() =>
-                                                            openEditTrail({
-                                                                ...trail,
-                                                                order_number: index + 1,
-                                                            })
-                                                        }
-                                                    >
-                                                        Editar
-                                                    </Button>
-
-                                                    <Button
-                                                        type="button"
-                                                        size="sm"
-                                                        variant="ghost"
-                                                        onClick={() => setConfirmDeleteTrail(trail.id)}
-                                                    >
-                                                        Excluir
-                                                    </Button>
-                                                </div>
-                                            </div>
-
-                                            <AnimatePresence>
-                                                {confirmDeleteTrail === trail.id && (
-                                                    <motion.div
-                                                        className={styles.confirmOverlay}
-                                                        initial={{ opacity: 0 }}
-                                                        animate={{ opacity: 1 }}
-                                                        exit={{ opacity: 0 }}
-                                                    >
-                                                        <motion.div
-                                                            className={styles.confirmBox}
-                                                            initial={{ scale: 0.9, opacity: 0 }}
-                                                            animate={{ scale: 1, opacity: 1 }}
-                                                            exit={{ scale: 0.9, opacity: 0 }}
-                                                            transition={{ duration: 0.2 }}
-                                                        >
-                                                            <h3 className={styles.confirmTitle}>
-                                                                Excluir trilha
-                                                            </h3>
-
-                                                            <p className={styles.confirmText}>
-                                                                Tem certeza que deseja excluir esta trilha? Esta
-                                                                ação não poderá ser desfeita.
-                                                            </p>
-
-                                                            <div className={styles.confirmActions}>
-                                                                <Button
-                                                                    type="button"
-                                                                    size="sm"
-                                                                    variant="success"
-                                                                    onClick={() => setConfirmDeleteTrail(null)}
-                                                                >
-                                                                    Cancelar
-                                                                </Button>
-
-                                                                <Button
-                                                                    type="button"
-                                                                    size="sm"
-                                                                    variant="error"
-                                                                    onClick={() => deleteTrail(trail.id)}
-                                                                >
-                                                                    Confirmar excluir
-                                                                </Button>
-                                                            </div>
-                                                        </motion.div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </motion.article>
-                                    ))}
-                                </AnimatePresence>
-                            </div>
-                        </motion.aside>
-                    </div>
-                </div>
-            </motion.section>
-
-            <JourneyTrailModal
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                mode={selectedTrail ? "edit" : "create"}
-                trail={selectedTrail}
-                journeyId={id}
-                onSave={handleTrailSaved}
-            />
-        </MainLayout>
+    const updatedTrails = trails.filter(
+      (trail) => trail.id !== trailId
     );
+
+    setJourney((current) => ({
+      ...current,
+      count: Math.max((current.count || 1) - 1, 0),
+    }));
+
+    await normalizeTrailOrder(updatedTrails);
+
+    setConfirmDeleteTrail(null);
+  }
+
+  async function normalizeTrailOrder(updatedTrails) {
+    const orderedTrails = [...updatedTrails]
+      .sort((a, b) => a.order_number - b.order_number)
+      .map((trail, index) => ({
+        ...trail,
+        order_number: index + 1,
+      }));
+
+    setTrails(orderedTrails);
+
+    await Promise.all(
+      orderedTrails.map((trail) =>
+        supabase
+          .from("trails")
+          .update({
+            order_number: trail.order_number,
+          })
+          .eq("id", trail.id)
+      )
+    );
+  }
+
+  async function handleTrailSaved(savedTrail) {
+    let updatedTrails;
+
+    if (selectedTrail?.id) {
+      updatedTrails = trails.map((trail) =>
+        trail.id === savedTrail.id ? savedTrail : trail
+      );
+    } else {
+      updatedTrails = [...trails, savedTrail];
+
+      setJourney((current) => ({
+        ...current,
+        count: (current.count || 0) + 1,
+      }));
+    }
+
+    await normalizeTrailOrder(updatedTrails);
+
+    closeModal();
+  }
+
+  async function copyJourneyLink() {
+    const link = `${window.location.origin}/jornada/${journey.slug}`;
+
+    await navigator.clipboard.writeText(link);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  }
+
+  if (!journey) {
+    return (
+      <MainLayout>
+        <Header isAuthenticated />
+        <Loading />
+      </MainLayout>
+    );
+  }
+
+  const calculatedWorkload = calculateWorkload();
+  const publicJourneyLink = `/jornada/${journey.slug}`;
+
+  const isCustomType =
+    journey.type && !typeOptions.includes(journey.type);
+
+  const selectTypeValue =
+    isCustomType ? "Outro" : journey.type || "";
+
+  const customTypeValue =
+    journey.customType || (isCustomType ? journey.type : "");
+
+  return (
+    <MainLayout>
+      <Header isAuthenticated />
+
+      <motion.section
+        className={styles.page}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className={styles.container}>
+          <motion.div
+            className={styles.header}
+            initial={{ opacity: 0, y: -24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div>
+              <Badge>EDITOR DA JORNADA</Badge>
+
+              <Title size="bg">Editar jornada</Title>
+
+              <Subtitle variant="light">
+                Atualize as informações principais e organize as trilhas que
+                aparecem no infográfico.
+              </Subtitle>
+            </div>
+
+            <Link to={publicJourneyLink} target="_blank">
+              <Button type="button" size="sm" variant="secondary">
+                Visualizar jornada
+              </Button>
+            </Link>
+          </motion.div>
+
+          <div className={styles.contentGrid}>
+            <div>
+              <motion.div
+                className={styles.shareBox}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.4 }}
+              >
+                <div className={styles.shareActions}>
+                  <div className={styles.shareTitle}>
+                    <Title size="md" highlight={journey.title}>
+                      Jornada:
+                    </Title>
+                  </div>
+
+                  <Link to={publicJourneyLink} target="_blank">
+                    <Button type="button" size="sm" variant="secondary">
+                      Visualizar
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className={styles.shareActions}>
+                  <Subtitle size="sm" variant="light">
+                    Copie e compartilhe este link com os participantes da
+                    jornada.
+                  </Subtitle>
+
+                  <div className={styles.shareLink}>
+                    {window.location.origin}/jornada/{journey.slug}
+
+                    <button
+                      type="button"
+                      onClick={copyJourneyLink}
+                      className={styles.copyButton}
+                      title={
+                        copied
+                          ? "Link copiado!"
+                          : "Copiar link da jornada"
+                      }
+                    >
+                      {copied ? <LuCheck /> : <LuCopy />}
+                    </button>
+                  </div>
+
+                  {copied && (
+                    <Subtitle size="sm" variant="success">
+                      Link copiado com sucesso!
+                    </Subtitle>
+                  )}
+                </div>
+              </motion.div>
+
+              <motion.form
+                className={styles.form}
+                onSubmit={handleUpdateJourney}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+              >
+                <div className={styles.formHeader}>
+                  <Title size="md">Informações da jornada</Title>
+
+                  <Subtitle size="md" variant="light">
+                    Esses dados aparecem no cabeçalho do infográfico.
+                  </Subtitle>
+                </div>
+
+                <div className={styles.grid}>
+                  <Input
+                    label="Empresa"
+                    name="company"
+                    value={journey.company || ""}
+                    onChange={handleJourneyChange}
+                  />
+
+                  <Input
+                    label="Slug"
+                    name="slug"
+                    value={journey.slug || ""}
+                    onChange={handleJourneyChange}
+                  />
+                </div>
+
+                <div className={styles.grid}>
+                  <Select
+                    label="Tipo da jornada"
+                    name="type"
+                    value={selectTypeValue}
+                    onChange={(event) => {
+                      const value = event.target.value;
+
+                      setJourney((current) => ({
+                        ...current,
+                        type: value,
+                        customType:
+                          value === "Outro" ? customTypeValue : "",
+                      }));
+                    }}
+                    options={typeOptions}
+                  />
+
+                  <Input
+                    label="Carga horária total"
+                    value={calculatedWorkload}
+                    disabled
+                  />
+                </div>
+
+                {(selectTypeValue === "Outro" || isCustomType) && (
+                  <Input
+                    label="Tipo personalizado"
+                    name="customType"
+                    placeholder="Ex: Residência"
+                    value={customTypeValue}
+                    onChange={(event) =>
+                      setJourney((current) => ({
+                        ...current,
+                        customType: event.target.value,
+                      }))
+                    }
+                  />
+                )}
+
+                <Input
+                  label="Título"
+                  name="title"
+                  value={journey.title || ""}
+                  onChange={handleJourneyChange}
+                />
+
+                <Input
+                  textarea
+                  label="Descrição"
+                  name="description"
+                  value={journey.description || ""}
+                  onChange={handleJourneyChange}
+                />
+
+                <div className={styles.actions}>
+                  <Button type="button" size="sm" variant="ghost">
+                    Cancelar
+                  </Button>
+
+                  <Button type="submit" size="sm">
+                    Salvar alterações
+                  </Button>
+                </div>
+              </motion.form>
+            </div>
+
+            <motion.aside
+              className={styles.trailsPanel}
+              initial={{ opacity: 0, x: 32 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.4 }}
+            >
+              <div className={styles.trailsHeader}>
+                <div>
+                  <Title size="md">Trilhas cadastradas</Title>
+
+                  <Subtitle size="sm" variant="light">
+                    {trails.length} trilhas no infográfico
+                  </Subtitle>
+                </div>
+
+                <Button type="button" size="sm" onClick={openCreateTrail}>
+                  + Add trilha
+                </Button>
+              </div>
+
+              <div className={styles.trailsList}>
+                {trails.length === 0 && (
+                  <div className={styles.empty}>
+                    <Subtitle size="sm" variant="light">
+                      Nenhuma trilha cadastrada ainda.
+                    </Subtitle>
+                  </div>
+                )}
+
+                <AnimatePresence>
+                  {trails.map((trail, index) => (
+                    <motion.article
+                      key={trail.id}
+                      className={styles.trailItem}
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      whileHover={{ y: -4 }}
+                      transition={{
+                        duration: 0.25,
+                        delay: index * 0.04,
+                      }}
+                    >
+                      <div className={styles.trailNumber}>
+                        {index + 1}
+                      </div>
+
+                      <div>
+                        <div className={styles.trailBody}>
+                          <div>
+                            <Title size="sm">{trail.title}</Title>
+
+                            {(trail.date || trail.hour) && (
+                              <div className={styles.trailMeta}>
+                                {trail.date && <span>{trail.date}</span>}
+                                {trail.date && trail.hour && <span>às</span>}
+                                {trail.hour && <span>{trail.hour}</span>}
+                              </div>
+                            )}
+
+                            <Subtitle size="md" variant="light">
+                              {trail.description}
+                            </Subtitle>
+                          </div>
+
+                          <Badge>
+                            {formatDuration(trail.duration_minutes)}
+                          </Badge>
+                        </div>
+
+                        {trail.links?.length > 0 && (
+                          <div className={styles.trailLinks}>
+                            {trail.links.map((link, linkIndex) => (
+                              <a
+                                key={linkIndex}
+                                href={link.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant={link.variant || "primary"}
+                                >
+                                  {link.title || "Acessar conteúdo"}
+                                </Button>
+                              </a>
+                            ))}
+                          </div>
+                        )}
+
+                        {trail.attachments?.length > 0 && (
+                          <div className={styles.attachments}>
+                            {trail.attachments.map((file, fileIndex) => (
+                              <a
+                                key={fileIndex}
+                                href={file.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={styles.attachmentLink}
+                              >
+                                <LuPaperclip />
+                                {file.name}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className={styles.footer}>
+                        <div className={styles.trailActions}>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="secondary"
+                            onClick={() =>
+                              openEditTrail({
+                                ...trail,
+                                order_number: index + 1,
+                              })
+                            }
+                          >
+                            Editar
+                          </Button>
+
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => setConfirmDeleteTrail(trail.id)}
+                          >
+                            Excluir
+                          </Button>
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {confirmDeleteTrail === trail.id && (
+                          <motion.div
+                            className={styles.confirmOverlay}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                          >
+                            <motion.div
+                              className={styles.confirmBox}
+                              initial={{ scale: 0.9, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.9, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <h3 className={styles.confirmTitle}>
+                                Excluir trilha
+                              </h3>
+
+                              <p className={styles.confirmText}>
+                                Tem certeza que deseja excluir esta trilha? Esta
+                                ação não poderá ser desfeita.
+                              </p>
+
+                              <div className={styles.confirmActions}>
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="success"
+                                  onClick={() => setConfirmDeleteTrail(null)}
+                                >
+                                  Cancelar
+                                </Button>
+
+                                <Button
+                                  type="button"
+                                  size="sm"
+                                  variant="error"
+                                  onClick={() => deleteTrail(trail.id)}
+                                >
+                                  Confirmar excluir
+                                </Button>
+                              </div>
+                            </motion.div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.article>
+                  ))}
+                </AnimatePresence>
+              </div>
+            </motion.aside>
+          </div>
+        </div>
+      </motion.section>
+
+      <JourneyTrailModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        mode={selectedTrail ? "edit" : "create"}
+        trail={selectedTrail}
+        journeyId={id}
+        onSave={handleTrailSaved}
+      />
+    </MainLayout>
+  );
 }
