@@ -126,22 +126,56 @@ export default function JourneyTrailModal({
   }
 
   async function handleFileUpload(event) {
-    const files = Array.from(event.target.files || []);
+
+    const files =
+      Array.from(event.target.files || []);
 
     if (files.length === 0) return;
 
-    if (form.attachments.length + files.length > 3) {
-      setErrorMessage("Você pode anexar no máximo 3 arquivos.");
+    if (
+      form.attachments.length +
+      files.length > 3
+    ) {
+
+      setErrorMessage(
+        "Você pode anexar no máximo 3 arquivos."
+      );
+
       event.target.value = "";
+
       return;
     }
 
     setLoading(true);
+
     setErrorMessage("");
 
     const uploadedFiles = [];
 
     for (const file of files) {
+
+      const allowedTypes = [
+        "application/pdf",
+        "video/mp4",
+        "image/png",
+        "image/jpeg",
+      ];
+
+      if (
+        !allowedTypes.includes(file.type)
+      ) {
+
+        setErrorMessage(
+          "Formato de arquivo não suportado."
+        );
+
+        setLoading(false);
+
+        return;
+      }
+
+      console.log(file.type);
+
       const fileExtension =
         file.name.split(".").pop();
 
@@ -151,26 +185,44 @@ export default function JourneyTrailModal({
       const filePath =
         `${journeyId}/${safeFileName}`;
 
-      const { error } = await supabase.storage
-        .from("trail-files")
-        .upload(filePath, file);
+      const { error } =
+        await supabase.storage
+
+          .from("trail-files")
+
+          .upload(
+            filePath,
+            file,
+            {
+              contentType: file.type,
+              upsert: false,
+            }
+          );
 
       if (error) {
-        console.log("ERRO UPLOAD:", error);
+
+        console.log(
+          "ERRO UPLOAD:",
+          error
+        );
 
         setErrorMessage(
           `Erro ao enviar arquivo: ${error.message}`
         );
 
         setLoading(false);
+
         event.target.value = "";
 
         return;
       }
 
-      const { data } = supabase.storage
-        .from("trail-files")
-        .getPublicUrl(filePath);
+      const { data } =
+        supabase.storage
+
+          .from("trail-files")
+
+          .getPublicUrl(filePath);
 
       uploadedFiles.push({
         name: file.name,
@@ -181,6 +233,7 @@ export default function JourneyTrailModal({
 
     setForm((current) => ({
       ...current,
+
       attachments: [
         ...current.attachments,
         ...uploadedFiles,
@@ -188,6 +241,7 @@ export default function JourneyTrailModal({
     }));
 
     setLoading(false);
+
     event.target.value = "";
   }
 
