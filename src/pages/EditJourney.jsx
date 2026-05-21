@@ -525,7 +525,7 @@ export default function EditJourney() {
                                                             >
                                                                 <Button
                                                                     type="button"
-                                                                    size="sm"
+                                                                    size="xsm"
                                                                     variant={link.variant || "primary"}
                                                                 >
                                                                     {link.title || "Acessar conteúdo"}
