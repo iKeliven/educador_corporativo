@@ -291,7 +291,7 @@ export default function About() {
         <div className={styles.textContainer}>
 
           <Subtitle
-            size="sm"
+            size="md"
             variant="light"
           >
             A plataforma foi desenvolvida para transformar treinamentos
