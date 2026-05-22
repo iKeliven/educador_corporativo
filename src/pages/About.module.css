@@ -38,7 +38,7 @@
     border-radius: var(--radius);
     background: rgba(19, 34, 56, 0.72);
     border: 1px solid var(--navy);
-    box-shadow: var(--shadow-god);
+    box-shadow: var(--box-shadow);
 }
 
 .mockupHeader {
@@ -47,7 +47,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    border-bottom: 1px solid var(--gold-transparent);
+    border-bottom: var(--border);
 }
 
 .mockupHeader span {
@@ -82,7 +82,7 @@
     padding: 1.5rem;
     border-radius: var(--radius);
     background: var(--navy-transparent);
-    border: 1px solid var(--gold-soft);
+    border: var(--border);
 }
 
 .mockupCard strong {
@@ -181,6 +181,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: var(--transition);
 }
 
 .featureGrid {
@@ -191,14 +192,14 @@
 
 .featureCard {
     padding: 3rem;
-
     border-radius: 2.4rem;
     background: var(--light-transparent);
     border: 1px solid transparent;
     transition: var(--transition);
 }
 
-.featureCard:hover {
+.featureCard:hover,
+.proposalGrid div:hover {
     transform: translateY(-0.5rem);
     border-color: var(--gold-transparent);
 }

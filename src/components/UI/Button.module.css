@@ -1,10 +1,8 @@
 .button {
     border-radius: var(--radius);
     border: none;
-
     cursor: pointer;
     font-weight: 600;
-
     transition: var(--transition);
 }
 
@@ -18,7 +16,7 @@
 }
 .dark{
     background-color: var(--night);
-    color: var(--gold);
+    color: var(--white);
 }
 .secondary {
     background: transparent;
@@ -32,21 +30,19 @@
     color: var(--white);
 }
 .error {
-    background: transparent;
-    border: 1px solid var(--color-danger);
-    color: var(--color-danger);
+    background: var(--color-danger);
+    color: var(--white);
 }
 
 .success {
-    background: transparent;
-    border: 1px solid var(--color-success);
-    color: var(--color-success);
+    background:  var(--color-success);
+    color: var(--white);
+    
 }
 
 .warning {
-    background: transparent;
-    border: 1px solid var(--color-warning);
-    color: var(--color-warning);
+    background: var(--color-warning);
+    color: var(--white);
 }
 .sm {
     padding: 8px 16px;

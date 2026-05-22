@@ -513,7 +513,7 @@ export default function JourneyTrailModal({
                     },
                     {
                       value: "dark",
-                      label: "Azul",
+                      label: "Escuro",
                     },
                     {
                       value: "secondary",
@@ -526,6 +526,10 @@ export default function JourneyTrailModal({
                     {
                       value: "success",
                       label: "Verde",
+                    },
+                    {
+                      value: "warning",
+                      label: "Amarelo",
                     },
                     {
                       value: "error",

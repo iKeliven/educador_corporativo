@@ -501,25 +501,26 @@ export default function EditJourney() {
 
                                             <div>
                                                 <div className={styles.trailBody}>
-                                                    <div>
-                                                        <Title size="sm">{trail.title}</Title>
-
-                                                        {(trail.date || trail.hour) && (
-                                                            <div className={styles.trailMeta}>
-                                                                {formatDate(trail.date) && <span>{trail.date}</span>}
-                                                                {trail.date && trail.hour && <span>às</span>}
-                                                                {trail.hour && <span>{trail.hour}</span>}
-                                                            </div>
-                                                        )}
-
-                                                        <Subtitle size="md" variant="light">
-                                                            {trail.description}
-                                                        </Subtitle>
+                                                    <div className={styles.trailHeader} >
+                                                        <div>
+                                                            <Title size="sm">{trail.title}</Title>
+                                                            {(trail.date || trail.hour) && (
+                                                                <div className={styles.trailMeta}>
+                                                                    {formatDate(trail.date) && <span>{trail.date}</span>}
+                                                                    {trail.date && trail.hour && <span>às</span>}
+                                                                    {trail.hour && <span>{trail.hour}</span>}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <Badge>
+                                                            {formatDuration(trail.duration_minutes)}
+                                                        </Badge>
                                                     </div>
 
-                                                    <Badge>
-                                                        {formatDuration(trail.duration_minutes)}
-                                                    </Badge>
+
+                                                    <Subtitle size="md" variant="light">
+                                                        {trail.description}
+                                                    </Subtitle>
                                                 </div>
 
                                                 {trail.links?.length > 0 && (
