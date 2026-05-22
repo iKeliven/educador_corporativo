@@ -299,7 +299,7 @@ export default function About() {
           </Subtitle>
 
           <Subtitle
-            size="sm"
+            size="md"
             variant="light"
           >
             Por meio de um sistema simples de gerenciamento, é possível criar
@@ -309,7 +309,7 @@ export default function About() {
           </Subtitle>
 
           <Subtitle
-            size="sm"
+            size="md"
             variant="light"
           >
             Cada jornada gera um link exclusivo, permitindo compartilhar
