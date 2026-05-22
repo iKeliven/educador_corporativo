@@ -203,7 +203,15 @@ export default function EditJourney() {
             )
         );
     }
+    function formatDate(date) {
 
+        if (!date) return "";
+
+        const [year, month, day] =
+            date.split("-");
+
+        return `${day}-${month}-${year}`;
+    }
     async function handleTrailSaved(savedTrail) {
         let updatedTrails;
 
@@ -498,7 +506,7 @@ export default function EditJourney() {
 
                                                         {(trail.date || trail.hour) && (
                                                             <div className={styles.trailMeta}>
-                                                                {trail.date && <span>{trail.date}</span>}
+                                                                {formatDate(trail.date) && <span>{trail.date}</span>}
                                                                 {trail.date && trail.hour && <span>às</span>}
                                                                 {trail.hour && <span>{trail.hour}</span>}
                                                             </div>

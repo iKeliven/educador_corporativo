@@ -73,7 +73,15 @@ export default function Journey() {
     if (hours) return `${hours}h`;
     return `${remaining}min`;
   }
+  function formatDate(date) {
 
+    if (!date) return "";
+
+    const [year, month, day] =
+      date.split("-");
+
+    return `${day}-${month}-${year}`;
+  }
   const totalMinutes = trails.reduce(
     (total, trail) => total + (Number(trail.duration_minutes) || 0),
     0
@@ -101,6 +109,7 @@ export default function Journey() {
       </MainLayout>
     );
   }
+
 
   return (
     <MainLayout>
@@ -188,7 +197,7 @@ export default function Journey() {
 
                   {(trail.date || trail.hour) && (
                     <p className={styles.dateInfo}>
-                      {trail.date}
+                      {formatDate(trail.date)}
                       {trail.date && trail.hour && " às "}
                       {trail.hour}
                     </p>
